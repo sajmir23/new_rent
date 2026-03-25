@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin\BookingStatus;
 use App\Models\Admin\City;
 use App\Models\Admin\VehicleCategory;
 use App\Models\Company\AdditionalService;
+use App\Models\Company\Booking;
 use App\Models\Company\Delivery;
 use App\Models\Company\Insurance;
 use App\Models\Company\SeasonalPrice;
 use App\Models\Company\Tariff;
 use App\Models\Company\Vehicle;
+use App\Services\BookingAvailabilityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -68,6 +71,32 @@ class WelcomeController extends Controller
     {
         $vehicle = Vehicle::baseData()->findOrFail($id);
 
+        $pickupDate = $request->query('pickupDate');
+        $dropoffDate = $request->query('dropoffDate');
+        $pickupTime = $request->query('pickupTime');
+        $dropoffTime = $request->query('dropoffTime');
+
+        $bookedDates = Booking::where('vehicle_id', $vehicle->id)
+            ->whereIn('booking_status_id', [BookingStatus::CONFIRMED, BookingStatus::ACTIVE, BookingStatus::PENDING,BookingStatus::COMPLETED])
+            ->where('dropoff_date', '>=', now()->toDateString())
+            ->get(['pickup_date', 'dropoff_date'])
+            ->map(function ($booking) {
+                return [
+                    'from' => \Carbon\Carbon::parse($booking->pickup_date)->format('Y-m-d'),
+                    'to'   => \Carbon\Carbon::parse($booking->dropoff_date)->format('Y-m-d')
+                ];
+            })->toArray();
+
+
+        $hasConflict = false;
+        if ($pickupDate && $dropoffDate) {
+            $reqStart = \Carbon\Carbon::parse("$pickupDate $pickupTime");
+            $reqEnd = \Carbon\Carbon::parse("$dropoffDate $dropoffTime");
+
+            $hasConflict = !app(BookingAvailabilityService::class)
+                ->isVehicleAvailable($vehicle->id, $reqStart, $reqEnd);
+        }
+
         $totalDays = $request->query('days', 1);
 
         $insurances = Insurance::where('company_id', $vehicle->company_id)->get();
@@ -80,7 +109,7 @@ class WelcomeController extends Controller
 
         if ($request->ajax()) {
 
-            return view('partials.booking_modal_content', compact('vehicle', 'totalDays','insurances','additionalServices','tariffs','seasonalPrices'))->render();
+            return view('partials.booking_modal_content', compact('vehicle', 'totalDays','insurances','additionalServices','tariffs','seasonalPrices','bookedDates','hasConflict'))->render();
         }
         abort(404);
     }

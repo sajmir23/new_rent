@@ -143,13 +143,19 @@ class Vehicle extends Model
                 'company_id','vehicle_category_id','transmission_type_id','min_drive_age',
                 'max_drive_age', 'international_licence_required',
             )
-            ->where('vehicle_status_id', 1);
+            ->whereIn('vehicle_status_id', [
+                VehicleStatus::AVAILABLE ?? 1,
+                VehicleStatus::BOOKED ?? 2,
+                VehicleStatus::MAINTENANCE ?? 3,
+                VehicleStatus::INACTIVE ?? 4,
+                VehicleStatus::RENTED ?? 5,
+            ]);
     }
 
 
     public function scopeFilter($query, $filters)
     {
-        $query->when(isset($filters['pickupDate'], $filters['dropoffDate']), function ($q) use ($filters) {
+        /*$query->when(isset($filters['pickupDate'], $filters['dropoffDate']), function ($q) use ($filters) {
 
             $start = $filters['pickupDate'] . ' ' . ($filters['pickupTime'] ?? '00:00');
             $end   = $filters['dropoffDate'] . ' ' . ($filters['dropoffTime'] ?? '23:59');
@@ -160,7 +166,7 @@ class Vehicle extends Model
             AND CONCAT(dropoff_date, ' ', dropoff_time) > ?
         ", [$end, $start]);
             });
-        });
+        });*/
 
         $query->when($filters['vehicleCategories'] ?? null, function ($q, $categories) {
             $q->whereIn('vehicle_category_id', (array) $categories);

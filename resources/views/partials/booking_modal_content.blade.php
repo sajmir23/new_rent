@@ -573,17 +573,43 @@
 <div id="tab-booking-content" class="modal-tab hidden">
     <h2 class="text-2xl sm:text-3xl font-black text-gray-900 uppercase tracking-tighter mb-8">Booking Details</h2>
 
+    <div id="conflict-warning-msg" class="bg-red-50 border border-red-200 p-4 mb-6 rounded-2xl flex items-start gap-3 {{ (isset($hasConflict) && $hasConflict) ? '' : 'hidden' }}">
+        <i class="fas fa-exclamation-circle text-red-500 text-lg mt-0.5"></i>
+        <div>
+            <h4 class="text-sm font-black text-red-800 uppercase tracking-tight">Kjo makinë është e zënë!</h4>
+            <p class="text-[11px] text-red-600 font-medium mt-1">Datat që keni kërkuar nuk janë të disponueshme. Ju lutem zgjidhni datat e lira me ngjyrë të errët.</p>
+        </div>
+    </div>
+
+    <div id="conflict-success-msg" class="bg-green-50 border border-green-200 p-4 mb-6 rounded-2xl flex items-start gap-3 hidden transition-all">
+        <i class="fas fa-check-circle text-green-500 text-lg mt-0.5"></i>
+        <div>
+            <h4 class="text-sm font-black text-green-800 uppercase tracking-tight">Datat janë të lira!</h4>
+            <p class="text-[11px] text-green-600 font-medium mt-1">Kjo makinë është e disponueshme në datat e përzgjedhura. Çmimi u përditësua automatikisht!</p>
+        </div>
+    </div>
+
+    <h2 class="text-2xl sm:text-3xl font-black text-gray-900 uppercase tracking-tighter mb-8">Booking Details</h2>
+
+    <input type="hidden" id="vehicle-booked-dates" value="{{ json_encode($bookedDates ?? []) }}">
+
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10">
         <div class="p-5 sm:p-6 bg-gray-50 rounded-3xl border border-gray-100">
             <span class="text-[10px] font-black text-orange-600 uppercase mb-2 block tracking-widest">Pick-up</span>
-            <div id="display-pickup-loc" class="font-bold text-gray-800 text-sm mb-1 break-words">...</div>
-            <div id="display-pickup-datetime" class="text-xs text-gray-500">...</div>
+            <div id="display-pickup-loc" class="font-bold text-gray-800 text-sm mb-3 break-words">...</div>
+            <div class="flex gap-1 sm:gap-2">
+                <input type="text" id="modal_pickup_date" class="w-[55%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Choose Date">
+                <input type="time" id="modal_pickup_time" class="w-[45%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
+            </div>
         </div>
 
         <div class="p-5 sm:p-6 bg-gray-50 rounded-3xl border border-gray-100">
             <span class="text-[10px] font-black text-orange-600 uppercase mb-2 block tracking-widest">Drop-off</span>
-            <div id="display-dropoff-loc" class="font-bold text-gray-800 text-sm mb-1 break-words">...</div>
-            <div id="display-dropoff-datetime" class="text-xs text-gray-500">...</div>
+            <div id="display-dropoff-loc" class="font-bold text-gray-800 text-sm mb-3 break-words">...</div>
+            <div class="flex gap-1 sm:gap-2">
+                <input type="text" id="modal_dropoff_date" class="w-[55%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Choose Date">
+                <input type="time" id="modal_dropoff_time" class="w-[45%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
+            </div>
         </div>
     </div>
 

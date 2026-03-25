@@ -1302,6 +1302,109 @@
             border-bottom: 3px solid #f97316;
         }
     </style>
+
+    <style>
+
+        .flatpickr-calendar {
+            border: none !important;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+            border-radius: 1.5rem !important;
+            padding: 5px !important;
+            font-family: 'Montserrat', sans-serif !important;
+        }
+        .flatpickr-innerContainer {
+            overflow: hidden !important;
+        }
+
+
+        .flatpickr-day.selected,
+        .flatpickr-day.startRange,
+        .flatpickr-day.endRange,
+        .flatpickr-day.selected.inRange,
+        .flatpickr-day.startRange.inRange,
+        .flatpickr-day.endRange.inRange,
+        .flatpickr-day.selected:focus,
+        .flatpickr-day.startRange:focus,
+        .flatpickr-day.endRange:focus,
+        .flatpickr-day.selected:hover,
+        .flatpickr-day.startRange:hover,
+        .flatpickr-day.endRange:hover,
+        .flatpickr-day.selected.prevMonthDay,
+        .flatpickr-day.startRange.prevMonthDay,
+        .flatpickr-day.endRange.prevMonthDay,
+        .flatpickr-day.selected.nextMonthDay,
+        .flatpickr-day.startRange.nextMonthDay,
+        .flatpickr-day.endRange.nextMonthDay {
+            background: #ea580c !important; /* bg-orange-600 */
+            border-color: #ea580c !important;
+            color: #fff !important;
+            font-weight: bold !important;
+        }
+
+        /* Stili per daten e sotme (rrethi portokalli kur nuk eshte klikuar) */
+        .flatpickr-day.today {
+            border-color: #ea580c !important;
+        }
+
+        /* Hover mbi daten e sotme */
+        .flatpickr-day.today:hover,
+        .flatpickr-day.today:focus {
+            border-color: #ea580c !important;
+            background: #ea580c !important;
+            color: #fff !important;
+        }
+
+        /* Hover mbi datat e tjera te lira (sfond i lehte portokalli) */
+        .flatpickr-day:hover,
+        .flatpickr-day.prevMonthDay:hover,
+        .flatpickr-day.nextMonthDay:hover,
+        .flatpickr-day:focus,
+        .flatpickr-day.prevMonthDay:focus,
+        .flatpickr-day.nextMonthDay:focus {
+            background: #ffedd5 !important; /* bg-orange-50 */
+            border-color: #ffedd5 !important;
+            color: #ea580c !important;
+            font-weight: bold !important;
+        }
+
+        /* Stilizimi i pjeses se muajit lart */
+        .flatpickr-months .flatpickr-month {
+            background: transparent !important;
+            color: #1f2937 !important; /* text-gray-800 */
+            fill: #1f2937 !important;
+        }
+
+        /* Font i theksuar per emrin e muajit */
+        .flatpickr-current-month .flatpickr-monthDropdown-months {
+            font-weight: 900 !important; /* font-black */
+            appearance: none; /* Heq shigjeten default te select */
+        }
+
+        /* Shigjetat para/mbrapa portokalli kur u ben hover */
+        .flatpickr-months .flatpickr-prev-month:hover svg,
+        .flatpickr-months .flatpickr-next-month:hover svg {
+            fill: #ea580c !important;
+        }
+
+        /* Stilizimi i diteve te javes (Hën, Mar, etj.) */
+        .flatpickr-weekdays {
+            background: transparent !important;
+        }
+        span.flatpickr-weekday {
+            color: #9ca3af !important; /* text-gray-400 */
+            font-weight: 800 !important;
+            font-size: 11px !important;
+            text-transform: uppercase !important;
+        }
+
+        /* Bllokimi vizual i datave te zena (gri e zbehte me vize) */
+        .flatpickr-day.flatpickr-disabled,
+        .flatpickr-day.flatpickr-disabled:hover {
+            color: #d1d5db !important; /* text-gray-300 */
+            background: transparent !important;
+            text-decoration: line-through;
+        }
+    </style>
 </head>
 
 <body class="bg-gray-50">
@@ -1634,7 +1737,10 @@
                 leftContent.innerHTML = '<div class="flex items-center justify-center h-full text-orange-600"><i class="fas fa-spinner fa-spin fa-3x"></i></div>';
                 rightContent.innerHTML = '<div class="flex items-center justify-center h-full text-orange-600"><i class="fas fa-spinner fa-spin fa-2x"></i></div>';
 
-                fetch(`/vehicle/${vehicleId}/booking-details?days=${days}`, {
+                let pDate = document.querySelector('input[name="pickupDate"]')?.value || '';
+                let dDate = document.querySelector('input[name="dropoffDate"]')?.value || '';
+
+                fetch(`/vehicle/${vehicleId}/booking-details?days=${days}&pickupDate=${pDate}&dropoffDate=${dDate}`, {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 })
                     .then(res => res.text())
@@ -1654,6 +1760,81 @@
                             showTab('car');
                             updateModalBookingDetails();
                             calculateTotal();
+
+                            const bookedDatesInput = document.getElementById('vehicle-booked-dates');
+                            let disabledDates = [];
+                            if (bookedDatesInput && bookedDatesInput.value) {
+                                disabledDates = JSON.parse(bookedDatesInput.value);
+                            }
+
+                            const pDateInput = document.querySelector('input[name="pickupDate"]');
+                            const dDateInput = document.querySelector('input[name="dropoffDate"]');
+                            const pTimeInput = document.querySelector('input[name="pickupTime"]');
+                            const dTimeInput = document.querySelector('input[name="dropoffTime"]');
+
+                            const modalPickupTime = document.getElementById('modal_pickup_time');
+                            const modalDropoffTime = document.getElementById('modal_dropoff_time');
+
+                            if(modalPickupTime && pTimeInput) modalPickupTime.value = pTimeInput.value;
+                            if(modalDropoffTime && dTimeInput) modalDropoffTime.value = dTimeInput.value;
+
+
+                            function syncDatesAndRecalculate() {
+                                const mPickup = document.getElementById('modal_pickup_date').value;
+                                const mDropoff = document.getElementById('modal_dropoff_date').value;
+
+                                // 1. Logjika e Mesazheve (E Kuqe -> E Gjelbër)
+                                const redMsg = document.getElementById('conflict-warning-msg');
+                                const greenMsg = document.getElementById('conflict-success-msg');
+
+                                if (mPickup && mDropoff) {
+                                    if (redMsg) redMsg.classList.add('hidden');
+                                    if (greenMsg) greenMsg.classList.remove('hidden');
+                                }
+
+                                // 2. Llogaritja ekskluzivisht për Modalin (Pa prekur Search Bar)
+                                if (mPickup && mDropoff) {
+                                    const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}`);
+                                    const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}`);
+                                    const diffTime = end - start;
+
+                                    if (diffTime >= 0) {
+                                        const diffMinutes = Math.floor(diffTime / (1000 * 60));
+                                        let diffDays = Math.floor(diffMinutes / (24 * 60));
+                                        if ((diffMinutes % (24 * 60)) >= 15) diffDays++;
+
+                                        const totalDays = diffDays + 1;
+
+                                        // Përditësojmë VETËM të dhënat brenda modalit
+                                        const calcTotalDays = document.getElementById('calc-total-days');
+                                        const modalDaysText = document.getElementById('summary-days-text');
+
+                                        if(calcTotalDays) calcTotalDays.value = totalDays;
+                                        if(modalDaysText) modalDaysText.innerText = totalDays;
+
+                                        calculateTotal(); // Llogarisim çmimet
+                                    }
+                                }
+                            }
+
+                            flatpickr("#modal_pickup_date", {
+                                dateFormat: "Y-m-d",
+                                minDate: "today",
+                                disable: disabledDates,
+                                defaultDate: pDateInput ? pDateInput.value : null,
+                                onChange: syncDatesAndRecalculate
+                            });
+
+                            flatpickr("#modal_dropoff_date", {
+                                dateFormat: "Y-m-d",
+                                minDate: "today",
+                                disable: disabledDates,
+                                defaultDate: dDateInput ? dDateInput.value : null,
+                                onChange: syncDatesAndRecalculate
+                            });
+
+                            if(modalPickupTime) modalPickupTime.addEventListener('change', syncDatesAndRecalculate);
+                            if(modalDropoffTime) modalDropoffTime.addEventListener('change', syncDatesAndRecalculate);
                         }
                     })
                     .catch(err => {
@@ -1712,10 +1893,10 @@
                         phone: document.getElementById('phone')?.value,
                         notes: document.getElementById('notes')?.value,
 
-                        pickup_date: formatDate(document.querySelector('input[name="pickupDate"]')?.value),
-                        dropoff_date: formatDate(document.querySelector('input[name="dropoffDate"]')?.value),
-                        pickup_time: document.querySelector('input[name="pickupTime"]')?.value,
-                        dropoff_time: document.querySelector('input[name="dropoffTime"]')?.value,
+                        pickup_date: formatDate(document.getElementById('modal_pickup_date')?.value || document.querySelector('input[name="pickupDate"]')?.value),
+                        dropoff_date: formatDate(document.getElementById('modal_dropoff_date')?.value || document.querySelector('input[name="dropoffDate"]')?.value),
+                        pickup_time: document.getElementById('modal_pickup_time')?.value || document.querySelector('input[name="pickupTime"]')?.value,
+                        dropoff_time: document.getElementById('modal_dropoff_time')?.value || document.querySelector('input[name="dropoffTime"]')?.value,
 
                         vehicle_id: document.getElementById('modal_vehicle_id')?.value,
                         insurance_id: document.querySelector('input[name="insurance"]:checked')?.value,
@@ -1856,7 +2037,8 @@
             try { seasonalPrices = JSON.parse(seasonsInput.value); } catch(e) {}
         }
 
-        const pickupInput = document.querySelector('input[name="pickupDate"]');
+        const modalPickupInput = document.getElementById('modal_pickup_date');
+        const pickupInput = (modalPickupInput && modalPickupInput.value) ? modalPickupInput : document.querySelector('input[name="pickupDate"]');
         let currentDate = pickupInput && pickupInput.value ? new Date(pickupInput.value) : new Date();
         currentDate.setHours(12, 0, 0, 0);
 
