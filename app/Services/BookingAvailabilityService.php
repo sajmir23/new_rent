@@ -11,7 +11,7 @@ class BookingAvailabilityService
     public function isVehicleAvailable(int $vehicleId, Carbon $pickupDateTime, Carbon $dropoffDateTime): bool
     {
         return !Booking::where('vehicle_id', $vehicleId)
-            ->whereIn('booking_status_id', [BookingStatus::CONFIRMED, BookingStatus::ACTIVE])  //BookingStatus:PENDING
+            ->whereIn('booking_status_id', [BookingStatus::CONFIRMED, BookingStatus::ACTIVE,BookingStatus::PENDING])  //BookingStatus:PENDING
             ->where(function ($query) use ($pickupDateTime, $dropoffDateTime) {
                 // Overlapping datetime check
                 $query->whereRaw(
