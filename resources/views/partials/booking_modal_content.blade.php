@@ -589,8 +589,6 @@
         </div>
     </div>
 
-    <h2 class="text-2xl sm:text-3xl font-black text-gray-900 uppercase tracking-tighter mb-8">Booking Details</h2>
-
     <input type="hidden" id="vehicle-booked-dates" value="{{ json_encode($bookedDates ?? []) }}">
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10">
@@ -647,9 +645,21 @@
     <h3 class="text-xl font-black text-gray-800 uppercase tracking-tight mb-6 sm:mb-8">Cost Summary</h3>
 
     <div class="space-y-4 mb-8 border-b border-gray-100 pb-8">
-        <div class="flex justify-between text-sm">
-            <span class="text-gray-400">Rent for <span id="summary-days-text">{{ $totalDays }}</span> days</span>
-            <span id="summary-base-rent" class="font-black text-gray-800">€0.00</span>
+        <div class="flex justify-between items-center text-sm mb-2">
+            <span class="text-gray-500">Rent for <span id="summary-days-text">{{ $totalDays }}</span> days</span>
+            <div class="text-right flex flex-col items-end">
+
+                <div id="discount-wrapper" class="hidden flex-col items-end">
+            <span id="discount-percent" class="text-[10px] font-black text-green-600 uppercase tracking-widest bg-green-50 px-2 py-0.5 rounded-md mb-1">
+                -0% Discount
+            </span>
+                    <span id="original-total-price" class="text-gray-400 line-through text-xs mb-0.5">
+                €0.00
+            </span>
+                </div>
+
+                <span id="summary-base-rent" class="font-black text-gray-900 text-lg">€0.00</span>
+            </div>
         </div>
 
         <div class="flex justify-between text-sm">

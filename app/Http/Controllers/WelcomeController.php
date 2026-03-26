@@ -110,14 +110,14 @@ class WelcomeController extends Controller
         if ($request->ajax()) {
 
             return view('partials.booking_modal_content', with([
-                    $vehicle => 'vehicle',
-                    $totalDays => 'totalDays',
-                    $insurances => 'insurances',
-                    $additionalServices => 'additionalServices',
-                    $tariffs => 'tariffs',
-                    $seasonalPrices => 'seasonalPrices',
-                    $bookedDates => 'bookedDates',
-                    $hasConflict => 'hasConflict'])
+                    'vehicle' => $vehicle,
+                    'totalDays' => $totalDays ,
+                    'insurances' => $insurances,
+                    'additionalServices' => $additionalServices,
+                    'tariffs' => $tariffs,
+                    'seasonalPrices' =>$seasonalPrices,
+                    'bookedDates'=>$bookedDates,
+                    'hasConflict' =>$hasConflict,])
             )->render();
         }
         abort(404);

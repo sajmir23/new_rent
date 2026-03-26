@@ -2021,6 +2021,7 @@
     }
 
     function calculateTotal() {
+
         const daysElement = document.getElementById('calc-total-days');
         const dailyRateElement = document.getElementById('calc-daily-rate');
 
@@ -2120,6 +2121,27 @@
         const payLaterUI = document.getElementById('summary-pay-later');
         const depositUI = document.getElementById('summary-deposit');
         const daysTextUI = document.getElementById('summary-days-text');
+
+        const discountWrapper = document.getElementById('discount-wrapper');
+        const discountPercent = document.getElementById('discount-percent');
+        const originalTotalPrice = document.getElementById('original-total-price');
+
+        if (tariffMultiplier < 1.0) {
+            const discountVal = Math.round((1 - tariffMultiplier) * 100);
+            if (discountWrapper) {
+                discountWrapper.classList.remove('hidden');
+                discountWrapper.classList.add('flex');
+            }
+            if (discountPercent) discountPercent.innerText = `-${discountVal}% LONG-TERM`;
+
+            if (originalTotalPrice) originalTotalPrice.innerText = '€' + totalBaseRentBeforeTariff.toFixed(2);
+        } else {
+
+            if (discountWrapper) {
+                discountWrapper.classList.add('hidden');
+                discountWrapper.classList.remove('flex');
+            }
+        }
 
         if (daysTextUI) daysTextUI.innerText = totalDays;
         if (baseRentUI) baseRentUI.innerText = '€' + baseRentCost.toFixed(2);
