@@ -27,3 +27,5 @@ Route::get('/leave-impersonate', [UserController::class, 'leaveImpersonate'])->n
 
 Route::get('/search', [WelcomeController::class, 'searchCars'])->name('search.cars');
 Route::get('/vehicle/{id}/booking-details', [WelcomeController::class, 'getVehicleBookingDetails'])->name('vehicle.booking.details');
+Route::view('/privacy-policy', 'privacy')->name('privacy.policy');
+Route::view('/terms', 'terms')->name('terms');

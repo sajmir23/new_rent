@@ -1589,6 +1589,17 @@
     </div>
 </footer>
 
+
+<div id="cookie-consent-banner" class="fixed bottom-0 left-0 z-50 w-full bg-[#2d3748] text-white p-4 sm:p-6 shadow-2xl transition-transform duration-500 translate-y-full flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="text-sm text-gray-300 max-w-4xl">
+        Our website uses cookies so we can improve user experience and to determine where visitors come from. By continuing to use our site, you agree to our use of cookies and with the
+        <a href="{{ route('privacy.policy') }}" class="text-[#20c997] hover:text-[#1aa179] underline font-semibold transition-colors">privacy policy</a>.
+    </div>
+    <button id="btn-accept-cookies" class="whitespace-nowrap bg-[#20c997] hover:bg-[#1aa179] text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-md">
+        Yes, I agree
+    </button>
+</div>
+
 <script>
 
     window.updateInsuranceUI = function(selectedRadio) {
@@ -2214,6 +2225,23 @@
         document.getElementById('display-pickup-loc').innerText = pLocText;
         document.getElementById('display-dropoff-loc').innerText = dLocText;
     }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const banner = document.getElementById('cookie-consent-banner');
+        const acceptBtn = document.getElementById('btn-accept-cookies');
+
+        if (!localStorage.getItem('cookieConsentAccepted')) {
+            setTimeout(() => {
+                banner.classList.remove('translate-y-full');
+            }, 1000);
+        }
+        acceptBtn.addEventListener('click', function() {
+            localStorage.setItem('cookieConsentAccepted', 'true');
+            banner.classList.add('translate-y-full');
+        });
+    });
 </script>
 
 </body>

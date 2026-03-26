@@ -576,16 +576,16 @@
     <div id="conflict-warning-msg" class="bg-red-50 border border-red-200 p-4 mb-6 rounded-2xl flex items-start gap-3 {{ (isset($hasConflict) && $hasConflict) ? '' : 'hidden' }}">
         <i class="fas fa-exclamation-circle text-red-500 text-lg mt-0.5"></i>
         <div>
-            <h4 class="text-sm font-black text-red-800 uppercase tracking-tight">Kjo makinë është e zënë!</h4>
-            <p class="text-[11px] text-red-600 font-medium mt-1">Datat që keni kërkuar nuk janë të disponueshme. Ju lutem zgjidhni datat e lira me ngjyrë të errët.</p>
+            <h4 class="text-sm font-black text-red-800 uppercase tracking-tight">This car is booked!</h4>
+            <p class="text-[11px] text-red-600 font-medium mt-1">The dates you requested are not available. Please select the available dates marked in dark color.</p>
         </div>
     </div>
 
     <div id="conflict-success-msg" class="bg-green-50 border border-green-200 p-4 mb-6 rounded-2xl flex items-start gap-3 hidden transition-all">
         <i class="fas fa-check-circle text-green-500 text-lg mt-0.5"></i>
         <div>
-            <h4 class="text-sm font-black text-green-800 uppercase tracking-tight">Datat janë të lira!</h4>
-            <p class="text-[11px] text-green-600 font-medium mt-1">Kjo makinë është e disponueshme në datat e përzgjedhura. Çmimi u përditësua automatikisht!</p>
+            <h4 class="text-sm font-black text-green-800 uppercase tracking-tight">Dates are available!</h4>
+            <p class="text-[11px] text-green-600 font-medium mt-1">This car is available for the selected dates. The price has been updated automatically!</p>
         </div>
     </div>
 
@@ -627,12 +627,35 @@
             <div class="flex flex-wrap gap-4 mt-3">
                 <label class="flex items-center gap-2"><input type="checkbox" class="accent-blue-600"> WhatsApp</label>
                 <label class="flex items-center gap-2"><input type="checkbox" class="accent-blue-600"> Telegram</label>
+                <label class="flex items-center gap-2"><input type="checkbox" class="accent-blue-600"> Instagram</label>
+                <label class="flex items-center gap-2"><input type="checkbox" class="accent-blue-600"> Facebook</label>
             </div>
         </div>
 
         <input type="hidden" id="modal_vehicle_id" value="{{ $vehicle->id }}">
 
         <textarea id="notes" placeholder="Comment" class="w-full mt-6 p-4 bg-gray-50 border-none rounded-xl text-sm focus:ring-2 focus:ring-orange-500 h-32"></textarea>
+
+        <div class="mt-6 flex flex-col gap-3 border-t border-gray-100 pt-5">
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="checkbox" id="terms_accept" name="terms_accept" required
+                       class="w-4 h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 cursor-pointer transition-all">
+                <span class="text-[13px] text-gray-600 font-medium group-hover:text-gray-900 transition-colors">
+            I accept the <a href="{{ route('terms') }}" target="_blank" class="text-[#20c997] hover:text-[#1aa179] transition-colors">Terms of use</a>
+        </span>
+            </label>
+
+            <label class="flex items-center gap-3 cursor-pointer group">
+                <input type="checkbox" id="privacy_read" name="privacy_read" required
+                       class="w-4 h-4 text-orange-600 bg-white border-gray-300 rounded focus:ring-orange-500 focus:ring-2 cursor-pointer transition-all">
+                <span class="text-[13px] text-gray-600 font-medium group-hover:text-gray-900 transition-colors">
+            I have read the <a href="{{ route('privacy.policy') }}" target="_blank" class="text-[#20c997] hover:text-[#1aa179] transition-colors">Privacy policy</a>
+        </span>
+            </label>
+
+        </div>
+
     </div>
 </div>
 
