@@ -585,7 +585,7 @@
         <i class="fas fa-check-circle text-green-500 text-lg mt-0.5"></i>
         <div>
             <h4 class="text-sm font-black text-green-800 uppercase tracking-tight">Dates are available!</h4>
-            <p class="text-[11px] text-green-600 font-medium mt-1">This car is available for the selected dates. The price has been updated automatically!</p>
+            <p class="text-[11px] text-green-600 font-medium mt-1">This car is available for the selected dates.</p>
         </div>
     </div>
 
@@ -697,7 +697,7 @@
 
         <div class="flex justify-between items-center py-2 border-b border-gray-50">
             <span class="text-xs font-bold text-gray-500 uppercase">Delivery</span>
-            <span id="summary-delivery" class="text-sm font-black text-gray-800">Free</span>
+            <span id="summary-delivery" class="text-sm font-black text-gray-800">Please choose one</span>
         </div>
     </div>
 

@@ -48,10 +48,11 @@ class WelcomeController extends Controller
                 $diffDays = floor($diffMinutes / (24 * 60));
                 $remainder = $diffMinutes % (24 * 60);
 
-                if ($remainder >= 15) {
+                if ($remainder >= 30) {
                     $diffDays++;
                 }
-                $totalDays = $diffDays + 1;
+                $totalDays = ($diffDays == 0) ?  1 : $diffDays;
+
             }
         }
         if ($request->ajax()) {
