@@ -329,14 +329,24 @@
 @include('partials.booking_modal')
 
 
-<div id="cookie-consent-banner" class="fixed bottom-0 left-0 z-50 w-full bg-[#2d3748] text-white p-4 sm:p-6 shadow-2xl transition-transform duration-500 translate-y-full flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="text-sm text-gray-300 max-w-4xl">
-        Our website uses cookies so we can improve user experience and to determine where visitors come from. By continuing to use our site, you agree to our use of cookies and with the
-        <a href="{{ route('privacy.policy') }}" class="text-[#20c997] hover:text-[#1aa179] underline font-semibold transition-colors">privacy policy</a>.
+<div id="cookie-consent-banner" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[200] w-[calc(100%-2rem)] sm:w-[380px] bg-[#2d3748] text-white p-5 sm:p-6 shadow-2xl rounded-2xl transition-all duration-500 transform translate-y-[150%] opacity-0 flex flex-col gap-4 border border-gray-700">
+
+    <div class="flex items-start justify-between gap-3">
+        <div class="w-10 h-10 bg-gray-700 rounded-full flex items-center justify-center shrink-0 shadow-inner">
+            <i class="fas fa-cookie-bite text-orange-400 text-lg"></i>
+        </div>
+        <div class="text-[11px] sm:text-xs text-gray-300 leading-relaxed flex-grow mt-0.5">
+            We use cookies to improve your experience and to determine where visitors come from. By continuing, you agree to our
+            <a href="{{ route('privacy.policy') }}" class="text-[#20c997] hover:text-[#1aa179] underline font-bold transition-colors">Privacy Policy</a>.
+        </div>
     </div>
-    <button id="btn-accept-cookies" class="whitespace-nowrap bg-[#20c997] hover:bg-[#1aa179] text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-md">
-        Yes, I agree
-    </button>
+
+    <div class="flex mt-1">
+        <button id="btn-accept-cookies" class="w-full bg-[#20c997] hover:bg-[#1aa179] text-white font-black py-3 px-6 rounded-xl transition-all shadow-md text-xs uppercase tracking-widest active:scale-95">
+            Yes, I agree
+        </button>
+    </div>
+
 </div>
 
 
@@ -863,8 +873,10 @@
                 } else if (buttonText.includes('Confirm Reservation')) {
 
                     const fieldsToValidate = [
+                        'modal_pickup_date', 'modal_pickup_time',
+                        'modal_dropoff_date', 'modal_dropoff_time',
                         'first_name', 'last_name', 'birthday',
-                        'email', 'phone','terms_accept', 'privacy_read'
+                        'email', 'phone', 'terms_accept', 'privacy_read'
                     ];
 
                     for (let id of fieldsToValidate) {
@@ -872,9 +884,22 @@
                         if (el) {
                             el.required = true;
 
+                            const hasReadOnly = el.hasAttribute('readonly');
+                            if (hasReadOnly) {
+                                el.removeAttribute('readonly');
+                            }
+
                             if (!el.checkValidity()) {
                                 el.reportValidity();
+
+                                if (hasReadOnly) {
+                                    el.setAttribute('readonly', 'readonly');
+                                }
                                 return;
+                            }
+
+                            if (hasReadOnly) {
+                                el.setAttribute('readonly', 'readonly');
                             }
                         }
                     }
@@ -1386,12 +1411,14 @@
 
         if (!localStorage.getItem('cookieConsentAccepted')) {
             setTimeout(() => {
-                banner.classList.remove('translate-y-full');
+
+                banner.classList.remove('translate-y-[150%]', 'opacity-0');
             }, 1000);
         }
+
         acceptBtn.addEventListener('click', function() {
             localStorage.setItem('cookieConsentAccepted', 'true');
-            banner.classList.add('translate-y-full');
+            banner.classList.add('translate-y-[150%]', 'opacity-0');
         });
     });
 </script>

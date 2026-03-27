@@ -84,16 +84,15 @@
     </div>
 
    {{-- <div class="mb-10">
-        <h3 class="text-lg font-black text-gray-800 uppercase mb-5 tracking-tight">Insurance Options</h3>
+        <h3 class="text-lg font-black text-gray-800 uppercase mb-5 tracking-tight">Insurance</h3>
         <div class="grid grid-cols-1 gap-4">
             @forelse($insurances as $index => $insurance)
-                <label class="relative flex flex-col sm:flex-row items-start p-4 sm:p-5 rounded-2xl border-2 {{ $loop->first ? 'border-orange-500 bg-orange-50/30' : 'border-gray-100 hover:border-orange-200' }} transition cursor-pointer insurance-label">
+                <label class="relative flex flex-col sm:flex-row items-start p-4 sm:p-5 rounded-2xl border-2 border-gray-100 hover:border-orange-200 transition cursor-pointer insurance-label">
 
                     <div class="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
                         <input type="radio"
                                name="insurance"
                                value="{{ $insurance->id }}"
-                               {{ $loop->first ? 'checked' : '' }}
                                class="mt-1 sm:mt-0 h-5 w-5 accent-orange-600 insurance-radio shrink-0"
                                data-price="{{ $insurance->price_per_day }}"
                                data-deposit="{{ $insurance->has_deposit ? $insurance->deposit_price : 0 }}"
@@ -105,20 +104,16 @@
                         <div class="flex flex-wrap justify-between items-center mb-1 gap-2">
                             <span class="font-bold text-gray-800 uppercase text-xs tracking-wide">{{ $insurance->title_en }}</span>
                             <span class="font-black {{ $insurance->price_per_day > 0 ? 'text-orange-600' : 'text-gray-400' }}">
-                                {{ $insurance->price_per_day > 0 ? '€' . number_format($insurance->price_per_day, 2) : 'Free of charge' }}
+                            {{ $insurance->price_per_day > 0 ? '€' . number_format($insurance->price_per_day, 2) : 'Free of charge' }}
                                 @if($insurance->price_per_day > 0)
                                     <small class="text-gray-400 text-xs">/day</small>
                                 @endif
-                            </span>
+                        </span>
                         </div>
 
-                        @if($loop->first)
-                            <div class="text-[10px] text-green-600 font-bold uppercase mb-2">Recommended</div>
-                        @endif
-
-                        <p class="text-[11px] text-gray-500">
+                        <p class="text-[11px] text-gray-500 mt-2">
                             @if($insurance->has_deposit && $insurance->deposit_price > 0)
-                                Deposit: €{{ number_format($insurance->deposit_price, 0) }}.
+                                <strong>Deposit: €{{ number_format($insurance->deposit_price, 0) }}</strong>.
                             @endif
                             {{ $insurance->description_en }}
                         </p>
@@ -134,7 +129,12 @@
         <h3 class="text-lg font-black text-gray-800 uppercase mb-5 tracking-tight">Insurance</h3>
         <div class="grid grid-cols-1 gap-4">
             @forelse($insurances as $index => $insurance)
-                <label class="relative flex flex-col sm:flex-row items-start p-4 sm:p-5 rounded-2xl border-2 border-gray-100 hover:border-orange-200 transition cursor-pointer insurance-label">
+                @php
+                    $isFree = $insurance->price_per_day == 0;
+                    $isChecked = $isFree || ($loop->first && $insurances->where('price_per_day', 0)->isEmpty());
+                @endphp
+
+                <label class="relative flex flex-col sm:flex-row items-start p-4 sm:p-5 rounded-2xl border-2 transition cursor-pointer insurance-label {{ $isChecked ? 'border-orange-500 bg-orange-50/30' : 'border-gray-100 hover:border-orange-200' }}">
 
                     <div class="flex items-center w-full sm:w-auto mb-3 sm:mb-0">
                         <input type="radio"
@@ -143,6 +143,7 @@
                                class="mt-1 sm:mt-0 h-5 w-5 accent-orange-600 insurance-radio shrink-0"
                                data-price="{{ $insurance->price_per_day }}"
                                data-deposit="{{ $insurance->has_deposit ? $insurance->deposit_price : 0 }}"
+                               {{ $isChecked ? 'checked' : '' }}
                                onclick="updateInsuranceUI(this)"
                                onchange="calculateTotal()">
                     </div>
