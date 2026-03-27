@@ -240,7 +240,7 @@
                         <i class="fas fa-calendar-alt text-gray-500 mr-2"></i> Pick-up Date
                     </label>
                     <div class="flex border border-gray-100 rounded-md bg-gray-50 focus-within:ring-2 focus-within:ring-orange-500">
-                        <input type="date" name="pickupDate" required class="w-[55%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none border-r border-gray-200">
+                        <input type="date" name="pickupDate" required min="{{ date('Y-m-d') }}" class="w-[55%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none border-r border-gray-200">
                         <input type="time" name="pickupTime" value="10:00" class="w-[47%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none">
                     </div>
                 </div>
@@ -250,7 +250,7 @@
                         <i class="fas fa-calendar-check text-gray-500 mr-2"></i> Drop-off Date
                     </label>
                     <div class="flex border border-gray-100 rounded-md bg-gray-50 focus-within:ring-2 focus-within:ring-orange-500">
-                        <input type="date" name="dropoffDate" required class="w-[55%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none border-r border-gray-200">
+                        <input type="date" name="dropoffDate" required min="{{ date('Y-m-d') }}" class="w-[55%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none border-r border-gray-200">
                         <input type="time" name="dropoffTime" value="10:00" class="w-[47%] px-1 py-2 text-[11px] font-medium bg-transparent outline-none">
                     </div>
                 </div>
@@ -385,6 +385,17 @@
         const pickupDateInput = document.querySelector('input[name="pickupDate"]');
         const pickupTimeInput = document.querySelector('input[name="pickupTime"]');
         const dropoffDateInput = document.querySelector('input[name="dropoffDate"]');
+
+        if (pickupDateInput && dropoffDateInput) {
+            pickupDateInput.addEventListener('change', function () {
+                dropoffDateInput.min = this.value;
+                if (dropoffDateInput.value && dropoffDateInput.value < this.value) {
+                    dropoffDateInput.value = '';
+                    if (typeof calculateDays === "function") calculateDays();
+                }
+            });
+        }
+
         const dropoffTimeInput = document.querySelector('input[name="dropoffTime"]');
         const durationDisplay = document.getElementById('duration-display');
         const daysCountSpan = document.getElementById('days-count');
