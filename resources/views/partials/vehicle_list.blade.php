@@ -8,7 +8,6 @@
                 <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=600&q=80" alt="Default Car" class="w-full h-full object-cover group-hover:scale-105 transition duration-500 opacity-80">
             @endif
 
-            {{-- Badge për marketing mbi foto --}}
             <div class="absolute top-4 left-4 flex flex-col gap-2">
                 <span class="bg-orange-600 text-white text-[9px] font-black px-2 py-1 rounded-md uppercase tracking-widest shadow-sm">Best Seller</span>
             </div>

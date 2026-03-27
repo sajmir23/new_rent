@@ -255,19 +255,23 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-1 flex flex-col justify-end relative mt-6 lg:mt-0">
-                    <div id="duration-display" class="absolute -top-6 left-0 right-0 text-center text-[10px] font-extrabold text-orange-600 uppercase tracking-widest opacity-0 transition-opacity duration-300 bg-orange-50 py-1 rounded-t-md border border-orange-100 border-b-0">
-                        <i class="fas fa-clock mr-1"></i> <span id="days-count">0</span> Days
-                    </div>
+                <div class="lg:col-span-1 flex flex-col justify-end mt-6 lg:mt-0">
+                    <div class="flex gap-2 items-end">
 
-                    <div class="flex gap-2 relative z-10">
-                        <button type="submit" class="w-full h-[46px] bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 transition uppercase tracking-tighter text-sm shadow-md flex items-center justify-center">
-                            SEARCH
+                        <div class="relative flex-grow">
+                            <div id="duration-display" class="absolute -top-6 left-0 right-0 text-center text-[10px] font-extrabold text-orange-600 uppercase tracking-widest opacity-0 transition-opacity duration-300 bg-orange-50 py-1 rounded-t-md border border-orange-100 border-b-0">
+                                <i class="fas fa-clock mr-1"></i> <span id="days-count">0</span> Days
+                            </div>
+
+                            <button type="submit" class="w-full h-[46px] bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 transition uppercase tracking-tighter text-sm shadow-md flex items-center justify-center">
+                                SEARCH
+                            </button>
+                        </div>
+
+                        <button type="button" id="clear-filters-btn" class="w-[46px] h-[46px] shrink-0 bg-gray-100 text-gray-400 hover:text-orange-600 hover:bg-orange-50 font-black rounded-lg transition shadow-sm flex items-center justify-center" title="Clear Filters">
+                            <i class="fas fa-undo"></i>
                         </button>
 
-                        <a href="/" class="w-[46px] h-[46px] shrink-0 bg-gray-100 text-gray-400 hover:text-orange-600 hover:bg-orange-50 font-black rounded-lg transition shadow-sm flex items-center justify-center" title="Clear Filters">
-                            <i class="fas fa-undo"></i>
-                        </a>
                     </div>
                 </div>
 
@@ -314,7 +318,28 @@
     </div>
 </div>
 
+<div id="global-loader" class="fixed inset-0 z-[200] hidden bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center transition-all">
+    <div class="relative flex items-center justify-center">
+        <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-b-4 border-orange-600"></div>
+        <i class="fas fa-car text-orange-600 text-2xl absolute animate-pulse"></i>
+    </div>
+    <div class="mt-4 text-orange-600 font-black tracking-widest uppercase text-xs animate-pulse">Loading...</div>
+</div>
+
 @include('partials.booking_modal')
+
+
+<div id="cookie-consent-banner" class="fixed bottom-0 left-0 z-50 w-full bg-[#2d3748] text-white p-4 sm:p-6 shadow-2xl transition-transform duration-500 translate-y-full flex flex-col sm:flex-row items-center justify-between gap-4">
+    <div class="text-sm text-gray-300 max-w-4xl">
+        Our website uses cookies so we can improve user experience and to determine where visitors come from. By continuing to use our site, you agree to our use of cookies and with the
+        <a href="{{ route('privacy.policy') }}" class="text-[#20c997] hover:text-[#1aa179] underline font-semibold transition-colors">privacy policy</a>.
+    </div>
+    <button id="btn-accept-cookies" class="whitespace-nowrap bg-[#20c997] hover:bg-[#1aa179] text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-md">
+        Yes, I agree
+    </button>
+</div>
+
+
 
 <footer class="bg-white border-t border-gray-100 py-10 md:py-16">
     <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
@@ -334,15 +359,7 @@
 </footer>
 
 
-<div id="cookie-consent-banner" class="fixed bottom-0 left-0 z-50 w-full bg-[#2d3748] text-white p-4 sm:p-6 shadow-2xl transition-transform duration-500 translate-y-full flex flex-col sm:flex-row items-center justify-between gap-4">
-    <div class="text-sm text-gray-300 max-w-4xl">
-        Our website uses cookies so we can improve user experience and to determine where visitors come from. By continuing to use our site, you agree to our use of cookies and with the
-        <a href="{{ route('privacy.policy') }}" class="text-[#20c997] hover:text-[#1aa179] underline font-semibold transition-colors">privacy policy</a>.
-    </div>
-    <button id="btn-accept-cookies" class="whitespace-nowrap bg-[#20c997] hover:bg-[#1aa179] text-white font-bold py-2.5 px-6 rounded-md transition-colors shadow-md">
-        Yes, I agree
-    </button>
-</div>
+
 
 <script>
 
@@ -375,6 +392,15 @@
         const modal = document.getElementById('booking-modal');
         const leftContent = document.getElementById('modal-left-content');
         const rightContent = document.getElementById('modal-right-content');
+
+
+        const clearFiltersBtn = document.getElementById('clear-filters-btn');
+        if (clearFiltersBtn && searchForm) {
+            clearFiltersBtn.addEventListener('click', function() {
+                searchForm.reset();
+                searchForm.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+            });
+        }
 
         function showTab(type) {
             const tabCar = document.getElementById('tab-car-content');
@@ -516,7 +542,10 @@
                 let days = (daysCountSpan) ? daysCountSpan.textContent.trim() : 1;
                 if (days === "0" || !days) days = 1;
 
-                modal.classList.remove('hidden');
+                const globalLoader = document.getElementById('global-loader');
+                if(globalLoader) globalLoader.classList.remove('hidden');
+
+                if(modal) modal.classList.add('hidden');
                 document.body.classList.add('overflow-hidden');
 
                 leftContent.innerHTML = '<div class="flex items-center justify-center h-full text-orange-600"><i class="fas fa-spinner fa-spin fa-3x"></i></div>';
@@ -542,6 +571,10 @@
                             leftContent.appendChild(newLeftTabCar);
                             leftContent.appendChild(newLeftTabBooking);
                             rightContent.innerHTML = newRightSummary.innerHTML;
+
+                            if(globalLoader) globalLoader.classList.add('hidden');
+                            modal.classList.remove('hidden');
+
                             showTab('car');
                             updateModalBookingDetails();
                             calculateTotal();
@@ -796,7 +829,9 @@
                     })
                     .catch(err => {
                         console.error("Error loading modal:", err);
+                        if(globalLoader) globalLoader.classList.add('hidden');
                         leftContent.innerHTML = '<div class="text-red-500 p-10">Something went wrong</div>';
+                        modal.classList.remove('hidden');
                     });
             }
 
@@ -815,6 +850,23 @@
                 if (buttonText.includes('Continue')) {
                     showTab('booking');
                 } else if (buttonText.includes('Confirm Reservation')) {
+
+                    const fieldsToValidate = [
+                        'first_name', 'last_name', 'birthday',
+                        'email', 'phone','terms_accept', 'privacy_read'
+                    ];
+
+                    for (let id of fieldsToValidate) {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.required = true;
+
+                            if (!el.checkValidity()) {
+                                el.reportValidity();
+                                return;
+                            }
+                        }
+                    }
 
                     const originalBtnHtml = btnNext.innerHTML;
                     btnNext.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Processing...';
@@ -849,6 +901,7 @@
                         email: document.getElementById('email')?.value,
                         phone: document.getElementById('phone')?.value,
                         notes: document.getElementById('notes')?.value,
+                        ways_of_contact: document.querySelector('input[name="ways_of_contact"]:checked')?.value || null,
 
                         pickup_date: formatDate(document.getElementById('modal_pickup_date')?.value || document.querySelector('input[name="pickupDate"]')?.value),
                         dropoff_date: formatDate(document.getElementById('modal_dropoff_date')?.value || document.querySelector('input[name="dropoffDate"]')?.value),

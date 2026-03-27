@@ -405,12 +405,24 @@ class BookingsController extends Controller
 
         cache()->forget($cacheKey);
 
-        $stripeInvoiceUrl = null;
+        /*$stripeInvoiceUrl = null;
         if (!empty($session->invoice)) {
             $invoice = $stripe->invoices->retrieve($session->invoice);
             $stripeInvoiceUrl = $invoice->invoice_pdf;
-           /* $stripeInvoiceUrl = $invoice->hosted_invoice_url;*/  //ketu shkarkon invoice edhe receipt
+           $stripeInvoiceUrl = $invoice->hosted_invoice_url;
 
+        }*/
+
+        $stripeInvoiceUrl = null;
+
+        if (!empty($session->payment_intent)) {
+            $paymentIntent = $stripe->paymentIntents->retrieve($session->payment_intent, [
+                'expand' => ['latest_charge']
+            ]);
+
+            if ($paymentIntent->latest_charge) {
+                $stripeInvoiceUrl = $paymentIntent->latest_charge->receipt_url;
+            }
         }
 
         $booking->load('vehicle', 'insurance', 'additionalServices');
