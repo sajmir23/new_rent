@@ -173,7 +173,7 @@
         <i class="fas fa-exclamation-circle text-red-500 text-lg mt-0.5"></i>
         <div>
             <h4 class="text-sm font-black text-red-800 uppercase tracking-tight">This car is booked!</h4>
-            <p class="text-[11px] text-red-600 font-medium mt-1">The dates you requested are not available. Please select the available dates marked in dark color.</p>
+            <p class="text-[11px] text-red-600 font-medium mt-1">The dates you requested are not available.Please choose dates that are not crossed-out in red.</p>
         </div>
     </div>
 
@@ -182,6 +182,14 @@
         <div>
             <h4 class="text-sm font-black text-green-800 uppercase tracking-tight">Dates are available!</h4>
             <p class="text-[11px] text-green-600 font-medium mt-1">This car is available for the selected dates.</p>
+        </div>
+    </div>
+
+    <div id="no-dropoff-warning-msg" class="bg-orange-50 border border-orange-200 p-4 mb-6 rounded-2xl flex items-start gap-3 hidden transition-all">
+        <i class="fas fa-calendar-times text-orange-500 text-lg mt-0.5"></i>
+        <div>
+            <h4 class="text-sm font-black text-orange-800 uppercase tracking-tight">Not enough days available</h4>
+            <p class="text-[11px] text-orange-600 font-medium mt-1">The car is booked immediately after this date.</p>
         </div>
     </div>
 

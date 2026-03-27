@@ -67,18 +67,16 @@
         .flatpickr-day.selected.nextMonthDay,
         .flatpickr-day.startRange.nextMonthDay,
         .flatpickr-day.endRange.nextMonthDay {
-            background: #ea580c !important; /* bg-orange-600 */
+            background: #ea580c !important;
             border-color: #ea580c !important;
             color: #fff !important;
             font-weight: bold !important;
         }
 
-        /* Stili per daten e sotme (rrethi portokalli kur nuk eshte klikuar) */
         .flatpickr-day.today {
             border-color: #ea580c !important;
         }
 
-        /* Hover mbi daten e sotme */
         .flatpickr-day.today:hover,
         .flatpickr-day.today:focus {
             border-color: #ea580c !important;
@@ -86,55 +84,63 @@
             color: #fff !important;
         }
 
-        /* Hover mbi datat e tjera te lira (sfond i lehte portokalli) */
         .flatpickr-day:hover,
         .flatpickr-day.prevMonthDay:hover,
         .flatpickr-day.nextMonthDay:hover,
         .flatpickr-day:focus,
         .flatpickr-day.prevMonthDay:focus,
         .flatpickr-day.nextMonthDay:focus {
-            background: #ffedd5 !important; /* bg-orange-50 */
+            background: #ffedd5 !important;
             border-color: #ffedd5 !important;
             color: #ea580c !important;
             font-weight: bold !important;
         }
 
-        /* Stilizimi i pjeses se muajit lart */
         .flatpickr-months .flatpickr-month {
             background: transparent !important;
             color: #1f2937 !important; /* text-gray-800 */
             fill: #1f2937 !important;
         }
 
-        /* Font i theksuar per emrin e muajit */
         .flatpickr-current-month .flatpickr-monthDropdown-months {
-            font-weight: 900 !important; /* font-black */
-            appearance: none; /* Heq shigjeten default te select */
+            font-weight: 900 !important;
+            appearance: none;
         }
 
-        /* Shigjetat para/mbrapa portokalli kur u ben hover */
         .flatpickr-months .flatpickr-prev-month:hover svg,
         .flatpickr-months .flatpickr-next-month:hover svg {
             fill: #ea580c !important;
         }
 
-        /* Stilizimi i diteve te javes (Hën, Mar, etj.) */
         .flatpickr-weekdays {
             background: transparent !important;
         }
         span.flatpickr-weekday {
-            color: #9ca3af !important; /* text-gray-400 */
+            color: #9ca3af !important;
             font-weight: 800 !important;
             font-size: 11px !important;
             text-transform: uppercase !important;
         }
 
-        /* Bllokimi vizual i datave te zena (gri e zbehte me vize) */
         .flatpickr-day.flatpickr-disabled,
         .flatpickr-day.flatpickr-disabled:hover {
-            color: #d1d5db !important; /* text-gray-300 */
-            background: transparent !important;
-            text-decoration: line-through;
+            background-color: #f3f4f6 !important;
+            color: #9ca3af !important;
+            text-decoration: line-through #ef4444 !important;
+            -webkit-text-decoration-color: #ef4444 !important;
+            opacity: 0.6;
+            cursor: not-allowed !important;
+            border-color: transparent !important;
+        }
+
+        .flatpickr-day.flatpickr-disabled.today {
+            border-color: transparent !important;
+        }
+
+        .flatpickr-day.flatpickr-disabled.prevMonthDay,
+        .flatpickr-day.flatpickr-disabled.nextMonthDay {
+            background-color: #f9fafb !important;
+            opacity: 0.4;
         }
     </style>
 </head>
@@ -254,9 +260,15 @@
                         <i class="fas fa-clock mr-1"></i> <span id="days-count">0</span> Days
                     </div>
 
-                    <button type="submit" class="w-full h-[46px] bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 transition uppercase tracking-tighter text-sm shadow-md flex items-center justify-center relative z-10">
-                        SEARCH
-                    </button>
+                    <div class="flex gap-2 relative z-10">
+                        <button type="submit" class="w-full h-[46px] bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 transition uppercase tracking-tighter text-sm shadow-md flex items-center justify-center">
+                            SEARCH
+                        </button>
+
+                        <a href="/" class="w-[46px] h-[46px] shrink-0 bg-gray-100 text-gray-400 hover:text-orange-600 hover:bg-orange-50 font-black rounded-lg transition shadow-sm flex items-center justify-center" title="Clear Filters">
+                            <i class="fas fa-undo"></i>
+                        </a>
+                    </div>
                 </div>
 
             </div>
@@ -407,10 +419,36 @@
             leftContent.scrollTop = 0;
         }
 
+        // function calculateDays() {
+        //     if (pickupDateInput && pickupDateInput.value && dropoffDateInput.value) {
+        //         const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}`);
+        //         const end = new Date(`${dropoffDateInput.value}T${dropoffTimeInput.value}`);
+        //         const diffTime = end - start;
+        //
+        //         if (diffTime >= 0) {
+        //             const diffMinutes = Math.floor(diffTime / (1000 * 60));
+        //             let diffDays = Math.floor(diffMinutes / (24 * 60));
+        //             const remainderMinutes = diffMinutes % (24 * 60);
+        //
+        //             if (remainderMinutes > 30) {
+        //                 diffDays++;
+        //             }
+        //
+        //             const totalDays = diffDays === 0 ? 1 : diffDays;
+        //
+        //             if(daysCountSpan) daysCountSpan.textContent = totalDays;
+        //             if (durationDisplay) durationDisplay.classList.replace('opacity-0', 'opacity-100');
+        //         } else {
+        //             if (durationDisplay) durationDisplay.classList.replace('opacity-100', 'opacity-0');
+        //         }
+        //     }
+        // }
+
         function calculateDays() {
             if (pickupDateInput && pickupDateInput.value && dropoffDateInput.value) {
-                const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}`);
-                const end = new Date(`${dropoffDateInput.value}T${dropoffTimeInput.value}`);
+                // Shtuar Z per te evituar problemin e nderrimit te ores (DST)
+                const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}Z`);
+                const end = new Date(`${dropoffDateInput.value}T${dropoffTimeInput.value}Z`);
                 const diffTime = end - start;
 
                 if (diffTime >= 0) {
@@ -418,6 +456,7 @@
                     let diffDays = Math.floor(diffMinutes / (24 * 60));
                     const remainderMinutes = diffMinutes % (24 * 60);
 
+                    // Toleranca fiks 30 minuta
                     if (remainderMinutes > 30) {
                         diffDays++;
                     }
@@ -527,21 +566,118 @@
                             if(modalDropoffTime && dTimeInput) modalDropoffTime.value = dTimeInput.value;
 
 
+                            // function syncDatesAndRecalculate() {
+                            //     const mPickup = document.getElementById('modal_pickup_date').value;
+                            //     const mDropoff = document.getElementById('modal_dropoff_date').value;
+                            //
+                            //     const redMsg = document.getElementById('conflict-warning-msg');
+                            //     const greenMsg = document.getElementById('conflict-success-msg');
+                            //     const mainBtn = document.getElementById('modal-main-btn');
+                            //
+                            //     if (mPickup && mDropoff) {
+                            //         let hasOverlap = false;
+                            //         if (disabledDates && disabledDates.length > 0) {
+                            //             for (let i = 0; i < disabledDates.length; i++) {
+                            //                 if (mPickup <= disabledDates[i].to && mDropoff >= disabledDates[i].from) {
+                            //                     hasOverlap = true;
+                            //                     break;
+                            //                 }
+                            //             }
+                            //         }
+                            //
+                            //         if (hasOverlap) {
+                            //             if (redMsg) redMsg.classList.remove('hidden');
+                            //             if (greenMsg) greenMsg.classList.add('hidden');
+                            //             if (mainBtn) {
+                            //                 mainBtn.disabled = true;
+                            //                 mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                            //             }
+                            //             return; // Ndërprit llogaritjen e totalit
+                            //         } else {
+                            //             // Nese eshte i lire, shfaq jeshilen dhe zhblloko butonin
+                            //             if (redMsg) redMsg.classList.add('hidden');
+                            //             if (greenMsg) greenMsg.classList.remove('hidden');
+                            //             if (mainBtn) {
+                            //                 mainBtn.disabled = false;
+                            //                 mainBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                            //             }
+                            //         }
+                            //
+                            //         // Llogaritja e ditëve (Kodi yt ekzistues)
+                            //         const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}`);
+                            //         const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}`);
+                            //         const diffTime = end - start;
+                            //
+                            //         if (diffTime >= 0) {
+                            //             const diffMinutes = Math.floor(diffTime / (1000 * 60));
+                            //             let diffDays = Math.floor(diffMinutes / (24 * 60));
+                            //             const remainderMinutes = diffMinutes % (24 * 60);
+                            //
+                            //             // Bëje 30 këtu që të jetë identik me Search Bar dhe Backend-in
+                            //             if (remainderMinutes > 30) {
+                            //                 diffDays++;
+                            //             }
+                            //
+                            //             const totalDays = diffDays === 0 ? 1 : diffDays;
+                            //
+                            //             const calcTotalDays = document.getElementById('calc-total-days');
+                            //             const modalDaysText = document.getElementById('summary-days-text');
+                            //
+                            //             if(calcTotalDays) calcTotalDays.value = totalDays;
+                            //             if(modalDaysText) modalDaysText.innerText = totalDays;
+                            //
+                            //             calculateTotal();
+                            //         }
+                            //     } else {
+                            //         // NËSE MUNGON NJËRA NGA DATAT: Fshih mesazhet, blloko butonin
+                            //         if (redMsg) redMsg.classList.add('hidden');
+                            //         if (greenMsg) greenMsg.classList.add('hidden');
+                            //         if (mainBtn) {
+                            //             mainBtn.disabled = true;
+                            //             mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                            //         }
+                            //     }
+                            // }
+
                             function syncDatesAndRecalculate() {
                                 const mPickup = document.getElementById('modal_pickup_date').value;
                                 const mDropoff = document.getElementById('modal_dropoff_date').value;
 
                                 const redMsg = document.getElementById('conflict-warning-msg');
                                 const greenMsg = document.getElementById('conflict-success-msg');
+                                const mainBtn = document.getElementById('modal-main-btn');
 
                                 if (mPickup && mDropoff) {
-                                    if (redMsg) redMsg.classList.add('hidden');
-                                    if (greenMsg) greenMsg.classList.remove('hidden');
-                                }
+                                    let hasOverlap = false;
+                                    if (disabledDates && disabledDates.length > 0) {
+                                        for (let i = 0; i < disabledDates.length; i++) {
+                                            if (mPickup <= disabledDates[i].to && mDropoff >= disabledDates[i].from) {
+                                                hasOverlap = true;
+                                                break;
+                                            }
+                                        }
+                                    }
 
-                                if (mPickup && mDropoff) {
-                                    const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}`);
-                                    const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}`);
+                                    if (hasOverlap) {
+                                        if (redMsg) redMsg.classList.remove('hidden');
+                                        if (greenMsg) greenMsg.classList.add('hidden');
+                                        if (mainBtn) {
+                                            mainBtn.disabled = true;
+                                            mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                                        }
+                                        return;
+                                    } else {
+                                        if (redMsg) redMsg.classList.add('hidden');
+                                        if (greenMsg) greenMsg.classList.remove('hidden');
+                                        if (mainBtn) {
+                                            mainBtn.disabled = false;
+                                            mainBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                                        }
+                                    }
+
+                                    // Shtuar Z per UTC
+                                    const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}Z`);
+                                    const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}Z`);
                                     const diffTime = end - start;
 
                                     if (diffTime >= 0) {
@@ -549,13 +685,10 @@
                                         let diffDays = Math.floor(diffMinutes / (24 * 60));
                                         const remainderMinutes = diffMinutes % (24 * 60);
 
-                                        if (remainderMinutes > 60) {
+                                        // Toleranca 30 minuta
+                                        if (remainderMinutes > 30) {
                                             diffDays++;
                                         }
-
-                                       /* if ((diffMinutes % (24 * 60)) >= 15) diffDays++;*/
-
-                                        /*const totalDays = diffDays + 1;*/
 
                                         const totalDays = diffDays === 0 ? 1 : diffDays;
 
@@ -567,8 +700,17 @@
 
                                         calculateTotal();
                                     }
+                                } else {
+                                    if (redMsg) redMsg.classList.add('hidden');
+                                    if (greenMsg) greenMsg.classList.add('hidden');
+                                    if (mainBtn) {
+                                        mainBtn.disabled = true;
+                                        mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                                    }
                                 }
                             }
+
+
 
                             flatpickr("#modal_pickup_date", {
                                 dateFormat: "Y-m-d",
@@ -577,20 +719,86 @@
                                 defaultDate: pDateInput ? pDateInput.value : null,
                                 onChange: function(selectedDates, dateStr, instance) {
                                     const dropoffInput = document.getElementById('modal_dropoff_date');
+                                    const warningNoDays = document.getElementById('no-dropoff-warning-msg'); // Mesazhi i ri
+                                    const mainBtn = document.getElementById('modal-main-btn');
+
                                     if (dropoffInput && dropoffInput._flatpickr && selectedDates.length > 0) {
                                         const dropoffPicker = dropoffInput._flatpickr;
-                                        dropoffPicker.set('minDate', dateStr);
-                                        const currentDropoffDate = dropoffPicker.selectedDates[0];
-                                        if (!currentDropoffDate || currentDropoffDate <= selectedDates[0]) {
-                                            let nextDay = new Date(selectedDates[0]);
-                                            nextDay.setDate(nextDay.getDate() + 1);
-                                            dropoffPicker.setDate(nextDay);
+
+                                        // ZGJIDHJA 1: Llogarit datën e nesërme dhe vendose si minimum për kthimin
+                                        let nextDay = new Date(selectedDates[0]);
+                                        nextDay.setDate(nextDay.getDate() + 1);
+
+                                        // Flatpickr kërkon formatin YYYY-MM-DD
+                                        const offset = nextDay.getTimezoneOffset();
+                                        let nextDayStr = new Date(nextDay.getTime() - (offset*60*1000)).toISOString().split('T')[0];
+
+                                        dropoffPicker.set('minDate', nextDayStr); // Bllokon zgjedhjen e të njëjtës datë
+
+                                        // Gjej rezervimin e parë që vjen PAS datës së zgjedhur të marrjes
+                                        let nextBookedDateStr = null;
+                                        if (disabledDates && disabledDates.length > 0) {
+                                            let sortedDates = [...disabledDates].sort((a, b) => new Date(a.from) - new Date(b.from));
+                                            for (let i = 0; i < sortedDates.length; i++) {
+                                                if (sortedDates[i].from >= dateStr) {
+                                                    nextBookedDateStr = sortedDates[i].from;
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        // ZGJIDHJA 2: Kontrollo nëse kalendari i kthimit mbetet pa asnjë datë të lirë
+                                        let hasAvailableDays = true;
+
+                                        if (nextBookedDateStr) {
+                                            dropoffPicker.set('maxDate', nextBookedDateStr);
+
+                                            // Nëse rezervimi i radhës është e nesërmja (ose më herët), s'ka ditë të lira për drop-off
+                                            if (nextBookedDateStr <= nextDayStr) {
+                                                hasAvailableDays = false;
+                                            }
+                                        } else {
+                                            dropoffPicker.set('maxDate', null);
+                                        }
+
+                                        // Menaxho Ndërfaqen (UX)
+                                        if (!hasAvailableDays) {
+                                            // Trego mesazhin e qartë klientit
+                                            if (warningNoDays) warningNoDays.classList.remove('hidden');
+
+                                            // Pastro kalendarin e drop-off sepse çdo datë aty është e pavlefshme
+                                            dropoffPicker.clear();
+
+                                            // Blloko butonin Continue
+                                            if (mainBtn) {
+                                                mainBtn.disabled = true;
+                                                mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+                                            }
+
+                                            // Fshih mesazhet e tjera
+                                            document.getElementById('conflict-success-msg')?.classList.add('hidden');
+                                            document.getElementById('conflict-warning-msg')?.classList.add('hidden');
+
+                                        } else {
+                                            // Gjithçka në rregull, fshih mesazhin e kufizimit
+                                            if (warningNoDays) warningNoDays.classList.add('hidden');
+
+                                            const currentDropoffDate = dropoffPicker.selectedDates[0];
+                                            const currentDropoffStr = dropoffInput.value;
+
+                                            // PASTRO kalendarin e kthimit në vend që ta auto-plotësosh me ditën e nesërme
+                                            if (!currentDropoffDate || currentDropoffStr <= dateStr || (nextBookedDateStr && currentDropoffStr >= nextBookedDateStr)) {
+                                                dropoffPicker.clear();
+                                            }
+
+                                            // Rillogarit
+                                            syncDatesAndRecalculate();
                                         }
                                     }
-                                    syncDatesAndRecalculate();
                                 }
                             });
 
+                            // Vetëm një instancë për dropoff_date
                             flatpickr("#modal_dropoff_date", {
                                 dateFormat: "Y-m-d",
                                 minDate: (pDateInput && pDateInput.value) ? pDateInput.value : "today",
@@ -786,8 +994,148 @@
         calculateTotal();
     }
 
-    function calculateTotal() {
+    // function calculateTotal() {
+    //
+    //     const daysElement = document.getElementById('calc-total-days');
+    //     const dailyRateElement = document.getElementById('calc-daily-rate');
+    //
+    //     if (!daysElement || !dailyRateElement) return;
+    //
+    //     const totalDays = parseInt(daysElement.value) || 1;
+    //     const baseDailyRate = parseFloat(dailyRateElement.value) || 0;
+    //
+    //     let totalBaseRentBeforeTariff = 0;
+    //     let seasonalPrices = [];
+    //     const seasonsInput = document.getElementById('calc-seasonal-prices');
+    //
+    //     if (seasonsInput && seasonsInput.value) {
+    //         try { seasonalPrices = JSON.parse(seasonsInput.value); } catch(e) {}
+    //     }
+    //
+    //     const modalPickupInput = document.getElementById('modal_pickup_date');
+    //     const pickupInput = (modalPickupInput && modalPickupInput.value) ? modalPickupInput : document.querySelector('input[name="pickupDate"]');
+    //     let currentDate = pickupInput && pickupInput.value ? new Date(pickupInput.value) : new Date();
+    //     currentDate.setHours(12, 0, 0, 0);
+    //
+    //     for (let i = 0; i < totalDays; i++) {
+    //         let dailyMultiplier = 1.0;
+    //
+    //         for (const season of seasonalPrices) {
+    //             const sStart = new Date(season.start_date);
+    //             const sEnd = new Date(season.end_date);
+    //             sStart.setHours(0, 0, 0, 0);
+    //             sEnd.setHours(23, 59, 59, 999);
+    //
+    //             if (currentDate >= sStart && currentDate <= sEnd) {
+    //                 dailyMultiplier *= parseFloat(season.rate_multiplier);
+    //             }
+    //         }
+    //
+    //         totalBaseRentBeforeTariff += (baseDailyRate * dailyMultiplier);
+    //         currentDate.setDate(currentDate.getDate() + 1);
+    //     }
+    //
+    //     let tariffMultiplier = 1.0;
+    //     const tariffsInput = document.getElementById('calc-tariffs');
+    //
+    //     if (tariffsInput && tariffsInput.value) {
+    //         try {
+    //             const tariffs = JSON.parse(tariffsInput.value);
+    //             const activeTariff = tariffs.find(t => {
+    //                 const meetsMinDays = totalDays >= t.min_days;
+    //                 const meetsMaxDays = t.max_days === null || totalDays <= t.max_days;
+    //                 return meetsMinDays && meetsMaxDays;
+    //             });
+    //
+    //             if (activeTariff && activeTariff.rate_multiplier !== undefined) {
+    //                 let parsedMultiplier = parseFloat(activeTariff.rate_multiplier);
+    //                 tariffMultiplier = parsedMultiplier > 0 ? parsedMultiplier : 1.0;
+    //             }
+    //         } catch (e) {}
+    //     }
+    //
+    //     const baseRentCost = totalBaseRentBeforeTariff * tariffMultiplier;
+    //
+    //     let totalInsuranceCost = 0;
+    //     let totalServicesCost = 0;
+    //     let totalDeliveryFee = 0;
+    //     let depositAmount = 0;
+    //
+    //     const selectedInsurance = document.querySelector('input[name="insurance"]:checked');
+    //     if (selectedInsurance) {
+    //         const insurancePricePerDay = parseFloat(selectedInsurance.dataset.price) || 0;
+    //         totalInsuranceCost = insurancePricePerDay * totalDays;
+    //         depositAmount = parseFloat(selectedInsurance.dataset.deposit) || 0;
+    //     }
+    //
+    //     const serviceInputs = document.querySelectorAll('.service-qty-input');
+    //     serviceInputs.forEach(input => {
+    //         const qty = parseInt(input.value) || 0;
+    //         const price = parseFloat(input.dataset.price) || 0;
+    //         totalServicesCost += (qty * price);
+    //     });
+    //
+    //     const pickupSelect = document.querySelector('select[name="pickupLocation"]');
+    //     const dropoffSelect = document.querySelector('select[name="dropoffLocation"]');
+    //
+    //     if (pickupSelect && pickupSelect.options[pickupSelect.selectedIndex]) {
+    //         totalDeliveryFee += parseFloat(pickupSelect.options[pickupSelect.selectedIndex].getAttribute('data-price')) || 0;
+    //     }
+    //     if (dropoffSelect && dropoffSelect.options[dropoffSelect.selectedIndex]) {
+    //         totalDeliveryFee += parseFloat(dropoffSelect.options[dropoffSelect.selectedIndex].getAttribute('data-price')) || 0;
+    //     }
+    //
+    //     const baseRentUI = document.getElementById('summary-base-rent');
+    //     const insuranceUI = document.getElementById('summary-insurance');
+    //     const servicesUI = document.getElementById('summary-services');
+    //     const deliveryUI = document.getElementById('summary-delivery');
+    //     const totalUI = document.getElementById('summary-total');
+    //
+    //     const payNowUI = document.getElementById('summary-pay-now');
+    //     const payLaterUI = document.getElementById('summary-pay-later');
+    //     const depositUI = document.getElementById('summary-deposit');
+    //     const daysTextUI = document.getElementById('summary-days-text');
+    //
+    //     const discountWrapper = document.getElementById('discount-wrapper');
+    //     const discountPercent = document.getElementById('discount-percent');
+    //     const originalTotalPrice = document.getElementById('original-total-price');
+    //
+    //     if (tariffMultiplier < 1.0) {
+    //         const discountVal = Math.round((1 - tariffMultiplier) * 100);
+    //         if (discountWrapper) {
+    //             discountWrapper.classList.remove('hidden');
+    //             discountWrapper.classList.add('flex');
+    //         }
+    //         if (discountPercent) discountPercent.innerText = `-${discountVal}% LONG-TERM`;
+    //
+    //         if (originalTotalPrice) originalTotalPrice.innerText = '€' + totalBaseRentBeforeTariff.toFixed(2);
+    //     } else {
+    //
+    //         if (discountWrapper) {
+    //             discountWrapper.classList.add('hidden');
+    //             discountWrapper.classList.remove('flex');
+    //         }
+    //     }
+    //
+    //     if (daysTextUI) daysTextUI.innerText = totalDays;
+    //     if (baseRentUI) baseRentUI.innerText = '€' + baseRentCost.toFixed(2);
+    //     if (insuranceUI) insuranceUI.innerText = totalInsuranceCost > 0 ? '€' + totalInsuranceCost.toFixed(2) : 'Included';
+    //     if (servicesUI) servicesUI.innerText = totalServicesCost > 0 ? '€' + totalServicesCost.toFixed(2) : '€0.00';
+    //     if (deliveryUI) deliveryUI.innerText = totalDeliveryFee > 0 ? '€' + totalDeliveryFee.toFixed(2) : 'Please choose one';
+    //
+    //
+    //     const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
+    //     const payNow = (baseRentCost + totalInsuranceCost + totalServicesCost) * 0.20;
+    //     const payLater = grandTotal - payNow;
+    //
+    //
+    //     if (totalUI) totalUI.innerText = '€' + grandTotal.toFixed(2);
+    //     if (payNowUI) payNowUI.innerText = '€' + payNow.toFixed(2);
+    //     if (payLaterUI) payLaterUI.innerText = '€' + payLater.toFixed(2);
+    //     if (depositUI) depositUI.innerText = '€' + depositAmount.toFixed(2);
+    // }
 
+    function calculateTotal() {
         const daysElement = document.getElementById('calc-total-days');
         const dailyRateElement = document.getElementById('calc-daily-rate');
 
@@ -899,10 +1247,8 @@
                 discountWrapper.classList.add('flex');
             }
             if (discountPercent) discountPercent.innerText = `-${discountVal}% LONG-TERM`;
-
             if (originalTotalPrice) originalTotalPrice.innerText = '€' + totalBaseRentBeforeTariff.toFixed(2);
         } else {
-
             if (discountWrapper) {
                 discountWrapper.classList.add('hidden');
                 discountWrapper.classList.remove('flex');
@@ -917,9 +1263,16 @@
 
 
         const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
-        const payNow = (baseRentCost + totalInsuranceCost + totalServicesCost) * 0.20;
-        const payLater = grandTotal - payNow;
 
+        // ZGJIDHJA FINALE PËR PAY NOW / PAY LATER
+        // Lexojmë elementin hidden (nëse ekziston) për përqindjen, përndryshe përdorim 20% default
+        const feeInput = document.getElementById('calc-fee-percentage');
+        const feePercentage = feeInput ? (parseFloat(feeInput.value) / 100) : 0.20;
+
+        // Llogarisim komisionin duke i zbritur depozitën e siguracionit nga Totali (siç e do Backend-i)
+        const baseForCommission = grandTotal - depositAmount;
+        const payNow = baseForCommission * feePercentage;
+        const payLater = grandTotal - payNow;
 
         if (totalUI) totalUI.innerText = '€' + grandTotal.toFixed(2);
         if (payNowUI) payNowUI.innerText = '€' + payNow.toFixed(2);
