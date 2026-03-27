@@ -446,7 +446,6 @@
 
         function calculateDays() {
             if (pickupDateInput && pickupDateInput.value && dropoffDateInput.value) {
-                // Shtuar Z per te evituar problemin e nderrimit te ores (DST)
                 const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}Z`);
                 const end = new Date(`${dropoffDateInput.value}T${dropoffTimeInput.value}Z`);
                 const diffTime = end - start;
@@ -456,7 +455,6 @@
                     let diffDays = Math.floor(diffMinutes / (24 * 60));
                     const remainderMinutes = diffMinutes % (24 * 60);
 
-                    // Toleranca fiks 30 minuta
                     if (remainderMinutes > 30) {
                         diffDays++;
                     }
@@ -675,7 +673,6 @@
                                         }
                                     }
 
-                                    // Shtuar Z per UTC
                                     const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}Z`);
                                     const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}Z`);
                                     const diffTime = end - start;
@@ -685,7 +682,6 @@
                                         let diffDays = Math.floor(diffMinutes / (24 * 60));
                                         const remainderMinutes = diffMinutes % (24 * 60);
 
-                                        // Toleranca 30 minuta
                                         if (remainderMinutes > 30) {
                                             diffDays++;
                                         }
@@ -719,23 +715,20 @@
                                 defaultDate: pDateInput ? pDateInput.value : null,
                                 onChange: function(selectedDates, dateStr, instance) {
                                     const dropoffInput = document.getElementById('modal_dropoff_date');
-                                    const warningNoDays = document.getElementById('no-dropoff-warning-msg'); // Mesazhi i ri
+                                    const warningNoDays = document.getElementById('no-dropoff-warning-msg');
                                     const mainBtn = document.getElementById('modal-main-btn');
 
                                     if (dropoffInput && dropoffInput._flatpickr && selectedDates.length > 0) {
                                         const dropoffPicker = dropoffInput._flatpickr;
 
-                                        // ZGJIDHJA 1: Llogarit datën e nesërme dhe vendose si minimum për kthimin
                                         let nextDay = new Date(selectedDates[0]);
                                         nextDay.setDate(nextDay.getDate() + 1);
 
-                                        // Flatpickr kërkon formatin YYYY-MM-DD
                                         const offset = nextDay.getTimezoneOffset();
                                         let nextDayStr = new Date(nextDay.getTime() - (offset*60*1000)).toISOString().split('T')[0];
 
-                                        dropoffPicker.set('minDate', nextDayStr); // Bllokon zgjedhjen e të njëjtës datë
+                                        dropoffPicker.set('minDate', nextDayStr);
 
-                                        // Gjej rezervimin e parë që vjen PAS datës së zgjedhur të marrjes
                                         let nextBookedDateStr = null;
                                         if (disabledDates && disabledDates.length > 0) {
                                             let sortedDates = [...disabledDates].sort((a, b) => new Date(a.from) - new Date(b.from));
@@ -747,13 +740,11 @@
                                             }
                                         }
 
-                                        // ZGJIDHJA 2: Kontrollo nëse kalendari i kthimit mbetet pa asnjë datë të lirë
                                         let hasAvailableDays = true;
 
                                         if (nextBookedDateStr) {
                                             dropoffPicker.set('maxDate', nextBookedDateStr);
 
-                                            // Nëse rezervimi i radhës është e nesërmja (ose më herët), s'ka ditë të lira për drop-off
                                             if (nextBookedDateStr <= nextDayStr) {
                                                 hasAvailableDays = false;
                                             }
@@ -761,44 +752,36 @@
                                             dropoffPicker.set('maxDate', null);
                                         }
 
-                                        // Menaxho Ndërfaqen (UX)
                                         if (!hasAvailableDays) {
-                                            // Trego mesazhin e qartë klientit
+
                                             if (warningNoDays) warningNoDays.classList.remove('hidden');
 
-                                            // Pastro kalendarin e drop-off sepse çdo datë aty është e pavlefshme
                                             dropoffPicker.clear();
 
-                                            // Blloko butonin Continue
                                             if (mainBtn) {
                                                 mainBtn.disabled = true;
                                                 mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
                                             }
 
-                                            // Fshih mesazhet e tjera
                                             document.getElementById('conflict-success-msg')?.classList.add('hidden');
                                             document.getElementById('conflict-warning-msg')?.classList.add('hidden');
 
                                         } else {
-                                            // Gjithçka në rregull, fshih mesazhin e kufizimit
                                             if (warningNoDays) warningNoDays.classList.add('hidden');
 
                                             const currentDropoffDate = dropoffPicker.selectedDates[0];
                                             const currentDropoffStr = dropoffInput.value;
 
-                                            // PASTRO kalendarin e kthimit në vend që ta auto-plotësosh me ditën e nesërme
                                             if (!currentDropoffDate || currentDropoffStr <= dateStr || (nextBookedDateStr && currentDropoffStr >= nextBookedDateStr)) {
                                                 dropoffPicker.clear();
                                             }
 
-                                            // Rillogarit
                                             syncDatesAndRecalculate();
                                         }
                                     }
                                 }
                             });
 
-                            // Vetëm një instancë për dropoff_date
                             flatpickr("#modal_dropoff_date", {
                                 dateFormat: "Y-m-d",
                                 minDate: (pDateInput && pDateInput.value) ? pDateInput.value : "today",
@@ -1257,19 +1240,16 @@
 
         if (daysTextUI) daysTextUI.innerText = totalDays;
         if (baseRentUI) baseRentUI.innerText = '€' + baseRentCost.toFixed(2);
-        if (insuranceUI) insuranceUI.innerText = totalInsuranceCost > 0 ? '€' + totalInsuranceCost.toFixed(2) : 'Included';
+        if (insuranceUI) insuranceUI.innerText = totalInsuranceCost > 0 ? '€' + totalInsuranceCost.toFixed(2) : '€0.00';
         if (servicesUI) servicesUI.innerText = totalServicesCost > 0 ? '€' + totalServicesCost.toFixed(2) : '€0.00';
         if (deliveryUI) deliveryUI.innerText = totalDeliveryFee > 0 ? '€' + totalDeliveryFee.toFixed(2) : 'Please choose one';
 
 
         const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
 
-        // ZGJIDHJA FINALE PËR PAY NOW / PAY LATER
-        // Lexojmë elementin hidden (nëse ekziston) për përqindjen, përndryshe përdorim 20% default
         const feeInput = document.getElementById('calc-fee-percentage');
         const feePercentage = feeInput ? (parseFloat(feeInput.value) / 100) : 0.20;
 
-        // Llogarisim komisionin duke i zbritur depozitën e siguracionit nga Totali (siç e do Backend-i)
         const baseForCommission = grandTotal - depositAmount;
         const payNow = baseForCommission * feePercentage;
         const payLater = grandTotal - payNow;

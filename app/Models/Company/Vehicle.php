@@ -146,8 +146,6 @@ class Vehicle extends Model
             ->whereIn('vehicle_status_id', [
                 VehicleStatus::AVAILABLE ?? 1,
                 VehicleStatus::BOOKED ?? 2,
-                VehicleStatus::MAINTENANCE ?? 3,
-                VehicleStatus::INACTIVE ?? 4,
                 VehicleStatus::RENTED ?? 5,
             ]);
     }

@@ -291,7 +291,7 @@
 
         <div class="flex justify-between text-sm">
             <span class="text-gray-400">Insurance</span>
-            <span id="summary-insurance" class="font-black text-gray-800 text-right">Included</span>
+            <span id="summary-insurance" class="font-black text-gray-800 text-right">€0.00</span>
         </div>
 
         <div class="flex justify-between text-sm">
