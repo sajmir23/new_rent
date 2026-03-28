@@ -179,7 +179,7 @@ class BookingsController extends Controller
             return response()->json(['error' =>'This vehicle is not available for these dates and times.'],422);
         }
 
-        $days = $pickupDateTime->diffInDays($dropoffDateTime) + 1;
+        $days = $pickupDateTime->diffInDays($dropoffDateTime);
 
         $pricing = $pricingService->calculate($vehicle, $pickupDateTime, $dropoffDateTime, $days);
 

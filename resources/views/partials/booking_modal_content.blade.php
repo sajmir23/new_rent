@@ -238,7 +238,7 @@
 
     <input type="hidden" id="vehicle-booked-dates" value="{{ json_encode($bookedDates ?? []) }}">
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10">
+    {{--<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10">
         <div class="p-5 sm:p-6 bg-gray-50 rounded-3xl border border-gray-100">
             <span class="text-[10px] font-black text-orange-600 uppercase mb-2 block tracking-widest">Pick-up</span>
             <div id="display-pickup-loc" class="font-bold text-gray-800 text-sm mb-3 break-words">...</div>
@@ -256,7 +256,54 @@
                 <input type="time" id="modal_dropoff_time" class="w-[45%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
             </div>
         </div>
+    </div>--}}
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-10">
+        <div class="p-5 sm:p-6 bg-gray-50 rounded-3xl border border-gray-100">
+            <span class="text-[10px] font-black text-orange-600 uppercase mb-2 block tracking-widest">Pick-up</span>
+
+            <select id="modal_pickup_location" class="w-full font-bold text-gray-800 text-sm mb-3 bg-transparent border-b border-gray-200 focus:outline-none focus:border-orange-500 pb-1 cursor-pointer" onchange="calculateTotal()">
+                @if(isset($deliveries))
+                    @foreach($deliveries->where('company_id', $vehicle->company_id) as $delivery)
+                        @php
+                            $cityName = $delivery->city_id == 1 ? 'Tirana' : ($delivery->city_id == 11 ? 'Saranda' : 'City '.$delivery->city_id);
+                        @endphp
+                        <option value="{{ $delivery->id }}" data-price="{{ $delivery->price }}">
+                            {{ $cityName }} - {{ $delivery->place }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+
+            <div class="flex gap-1 sm:gap-2">
+                <input type="text" id="modal_pickup_date" class="w-[55%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Choose Date">
+                <input type="time" id="modal_pickup_time" class="w-[45%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
+            </div>
+        </div>
+
+        <div class="p-5 sm:p-6 bg-gray-50 rounded-3xl border border-gray-100">
+            <span class="text-[10px] font-black text-orange-600 uppercase mb-2 block tracking-widest">Drop-off</span>
+
+            <select id="modal_dropoff_location" class="w-full font-bold text-gray-800 text-sm mb-3 bg-transparent border-b border-gray-200 focus:outline-none focus:border-orange-500 pb-1 cursor-pointer" onchange="calculateTotal()">
+                @if(isset($deliveries))
+                    @foreach($deliveries->where('company_id', $vehicle->company_id) as $delivery)
+                        @php
+                            $cityName = $delivery->city_id == 1 ? 'Tirana' : ($delivery->city_id == 11 ? 'Saranda' : 'City '.$delivery->city_id);
+                        @endphp
+                        <option value="{{ $delivery->id }}" data-price="{{ $delivery->price }}">
+                            {{ $cityName }} - {{ $delivery->place }}
+                        </option>
+                    @endforeach
+                @endif
+            </select>
+
+            <div class="flex gap-1 sm:gap-2">
+                <input type="text" id="modal_dropoff_date" class="w-[55%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none" placeholder="Choose Date">
+                <input type="time" id="modal_dropoff_time" class="w-[45%] p-2 text-xs font-bold bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 outline-none">
+            </div>
+        </div>
     </div>
+
 
     <div class="space-y-6">
         <h3 class="text-lg font-black text-gray-800 uppercase tracking-tight mb-4">Main Driver's Details</h3>

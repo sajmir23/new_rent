@@ -466,31 +466,6 @@
             leftContent.scrollTop = 0;
         }
 
-        // function calculateDays() {
-        //     if (pickupDateInput && pickupDateInput.value && dropoffDateInput.value) {
-        //         const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}`);
-        //         const end = new Date(`${dropoffDateInput.value}T${dropoffTimeInput.value}`);
-        //         const diffTime = end - start;
-        //
-        //         if (diffTime >= 0) {
-        //             const diffMinutes = Math.floor(diffTime / (1000 * 60));
-        //             let diffDays = Math.floor(diffMinutes / (24 * 60));
-        //             const remainderMinutes = diffMinutes % (24 * 60);
-        //
-        //             if (remainderMinutes > 30) {
-        //                 diffDays++;
-        //             }
-        //
-        //             const totalDays = diffDays === 0 ? 1 : diffDays;
-        //
-        //             if(daysCountSpan) daysCountSpan.textContent = totalDays;
-        //             if (durationDisplay) durationDisplay.classList.replace('opacity-0', 'opacity-100');
-        //         } else {
-        //             if (durationDisplay) durationDisplay.classList.replace('opacity-100', 'opacity-0');
-        //         }
-        //     }
-        // }
-
         function calculateDays() {
             if (pickupDateInput && pickupDateInput.value && dropoffDateInput.value) {
                 const start = new Date(`${pickupDateInput.value}T${pickupTimeInput.value}Z`);
@@ -617,79 +592,6 @@
                             if(modalPickupTime && pTimeInput) modalPickupTime.value = pTimeInput.value;
                             if(modalDropoffTime && dTimeInput) modalDropoffTime.value = dTimeInput.value;
 
-
-                            // function syncDatesAndRecalculate() {
-                            //     const mPickup = document.getElementById('modal_pickup_date').value;
-                            //     const mDropoff = document.getElementById('modal_dropoff_date').value;
-                            //
-                            //     const redMsg = document.getElementById('conflict-warning-msg');
-                            //     const greenMsg = document.getElementById('conflict-success-msg');
-                            //     const mainBtn = document.getElementById('modal-main-btn');
-                            //
-                            //     if (mPickup && mDropoff) {
-                            //         let hasOverlap = false;
-                            //         if (disabledDates && disabledDates.length > 0) {
-                            //             for (let i = 0; i < disabledDates.length; i++) {
-                            //                 if (mPickup <= disabledDates[i].to && mDropoff >= disabledDates[i].from) {
-                            //                     hasOverlap = true;
-                            //                     break;
-                            //                 }
-                            //             }
-                            //         }
-                            //
-                            //         if (hasOverlap) {
-                            //             if (redMsg) redMsg.classList.remove('hidden');
-                            //             if (greenMsg) greenMsg.classList.add('hidden');
-                            //             if (mainBtn) {
-                            //                 mainBtn.disabled = true;
-                            //                 mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                            //             }
-                            //             return; // Ndërprit llogaritjen e totalit
-                            //         } else {
-                            //             // Nese eshte i lire, shfaq jeshilen dhe zhblloko butonin
-                            //             if (redMsg) redMsg.classList.add('hidden');
-                            //             if (greenMsg) greenMsg.classList.remove('hidden');
-                            //             if (mainBtn) {
-                            //                 mainBtn.disabled = false;
-                            //                 mainBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                            //             }
-                            //         }
-                            //
-                            //         // Llogaritja e ditëve (Kodi yt ekzistues)
-                            //         const start = new Date(`${mPickup}T${document.getElementById('modal_pickup_time').value || '10:00'}`);
-                            //         const end = new Date(`${mDropoff}T${document.getElementById('modal_dropoff_time').value || '10:00'}`);
-                            //         const diffTime = end - start;
-                            //
-                            //         if (diffTime >= 0) {
-                            //             const diffMinutes = Math.floor(diffTime / (1000 * 60));
-                            //             let diffDays = Math.floor(diffMinutes / (24 * 60));
-                            //             const remainderMinutes = diffMinutes % (24 * 60);
-                            //
-                            //             // Bëje 30 këtu që të jetë identik me Search Bar dhe Backend-in
-                            //             if (remainderMinutes > 30) {
-                            //                 diffDays++;
-                            //             }
-                            //
-                            //             const totalDays = diffDays === 0 ? 1 : diffDays;
-                            //
-                            //             const calcTotalDays = document.getElementById('calc-total-days');
-                            //             const modalDaysText = document.getElementById('summary-days-text');
-                            //
-                            //             if(calcTotalDays) calcTotalDays.value = totalDays;
-                            //             if(modalDaysText) modalDaysText.innerText = totalDays;
-                            //
-                            //             calculateTotal();
-                            //         }
-                            //     } else {
-                            //         // NËSE MUNGON NJËRA NGA DATAT: Fshih mesazhet, blloko butonin
-                            //         if (redMsg) redMsg.classList.add('hidden');
-                            //         if (greenMsg) greenMsg.classList.add('hidden');
-                            //         if (mainBtn) {
-                            //             mainBtn.disabled = true;
-                            //             mainBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
-                            //         }
-                            //     }
-                            // }
 
                             function syncDatesAndRecalculate() {
                                 const mPickup = document.getElementById('modal_pickup_date').value;
@@ -951,8 +853,8 @@
 
                         payment_gateway: document.querySelector('input[name="payment_gateway"]:checked')?.value,
 
-                        pickup_location: document.querySelector('select[name="pickupLocation"]')?.value || document.querySelector('input[name="pickupLocation"]')?.value || 1,
-                        dropoff_location: document.querySelector('select[name="dropoffLocation"]')?.value || document.querySelector('input[name="dropoffLocation"]')?.value || 1,
+                        pickup_location: document.getElementById('modal_pickup_location')?.value || document.querySelector('select[name="pickupLocation"]')?.value || 1,
+                        dropoff_location: document.getElementById('modal_dropoff_location')?.value || document.querySelector('select[name="dropoffLocation"]')?.value || 1,
 
                         booking_status_id: 1
                     };
@@ -1066,147 +968,6 @@
         calculateTotal();
     }
 
-    // function calculateTotal() {
-    //
-    //     const daysElement = document.getElementById('calc-total-days');
-    //     const dailyRateElement = document.getElementById('calc-daily-rate');
-    //
-    //     if (!daysElement || !dailyRateElement) return;
-    //
-    //     const totalDays = parseInt(daysElement.value) || 1;
-    //     const baseDailyRate = parseFloat(dailyRateElement.value) || 0;
-    //
-    //     let totalBaseRentBeforeTariff = 0;
-    //     let seasonalPrices = [];
-    //     const seasonsInput = document.getElementById('calc-seasonal-prices');
-    //
-    //     if (seasonsInput && seasonsInput.value) {
-    //         try { seasonalPrices = JSON.parse(seasonsInput.value); } catch(e) {}
-    //     }
-    //
-    //     const modalPickupInput = document.getElementById('modal_pickup_date');
-    //     const pickupInput = (modalPickupInput && modalPickupInput.value) ? modalPickupInput : document.querySelector('input[name="pickupDate"]');
-    //     let currentDate = pickupInput && pickupInput.value ? new Date(pickupInput.value) : new Date();
-    //     currentDate.setHours(12, 0, 0, 0);
-    //
-    //     for (let i = 0; i < totalDays; i++) {
-    //         let dailyMultiplier = 1.0;
-    //
-    //         for (const season of seasonalPrices) {
-    //             const sStart = new Date(season.start_date);
-    //             const sEnd = new Date(season.end_date);
-    //             sStart.setHours(0, 0, 0, 0);
-    //             sEnd.setHours(23, 59, 59, 999);
-    //
-    //             if (currentDate >= sStart && currentDate <= sEnd) {
-    //                 dailyMultiplier *= parseFloat(season.rate_multiplier);
-    //             }
-    //         }
-    //
-    //         totalBaseRentBeforeTariff += (baseDailyRate * dailyMultiplier);
-    //         currentDate.setDate(currentDate.getDate() + 1);
-    //     }
-    //
-    //     let tariffMultiplier = 1.0;
-    //     const tariffsInput = document.getElementById('calc-tariffs');
-    //
-    //     if (tariffsInput && tariffsInput.value) {
-    //         try {
-    //             const tariffs = JSON.parse(tariffsInput.value);
-    //             const activeTariff = tariffs.find(t => {
-    //                 const meetsMinDays = totalDays >= t.min_days;
-    //                 const meetsMaxDays = t.max_days === null || totalDays <= t.max_days;
-    //                 return meetsMinDays && meetsMaxDays;
-    //             });
-    //
-    //             if (activeTariff && activeTariff.rate_multiplier !== undefined) {
-    //                 let parsedMultiplier = parseFloat(activeTariff.rate_multiplier);
-    //                 tariffMultiplier = parsedMultiplier > 0 ? parsedMultiplier : 1.0;
-    //             }
-    //         } catch (e) {}
-    //     }
-    //
-    //     const baseRentCost = totalBaseRentBeforeTariff * tariffMultiplier;
-    //
-    //     let totalInsuranceCost = 0;
-    //     let totalServicesCost = 0;
-    //     let totalDeliveryFee = 0;
-    //     let depositAmount = 0;
-    //
-    //     const selectedInsurance = document.querySelector('input[name="insurance"]:checked');
-    //     if (selectedInsurance) {
-    //         const insurancePricePerDay = parseFloat(selectedInsurance.dataset.price) || 0;
-    //         totalInsuranceCost = insurancePricePerDay * totalDays;
-    //         depositAmount = parseFloat(selectedInsurance.dataset.deposit) || 0;
-    //     }
-    //
-    //     const serviceInputs = document.querySelectorAll('.service-qty-input');
-    //     serviceInputs.forEach(input => {
-    //         const qty = parseInt(input.value) || 0;
-    //         const price = parseFloat(input.dataset.price) || 0;
-    //         totalServicesCost += (qty * price);
-    //     });
-    //
-    //     const pickupSelect = document.querySelector('select[name="pickupLocation"]');
-    //     const dropoffSelect = document.querySelector('select[name="dropoffLocation"]');
-    //
-    //     if (pickupSelect && pickupSelect.options[pickupSelect.selectedIndex]) {
-    //         totalDeliveryFee += parseFloat(pickupSelect.options[pickupSelect.selectedIndex].getAttribute('data-price')) || 0;
-    //     }
-    //     if (dropoffSelect && dropoffSelect.options[dropoffSelect.selectedIndex]) {
-    //         totalDeliveryFee += parseFloat(dropoffSelect.options[dropoffSelect.selectedIndex].getAttribute('data-price')) || 0;
-    //     }
-    //
-    //     const baseRentUI = document.getElementById('summary-base-rent');
-    //     const insuranceUI = document.getElementById('summary-insurance');
-    //     const servicesUI = document.getElementById('summary-services');
-    //     const deliveryUI = document.getElementById('summary-delivery');
-    //     const totalUI = document.getElementById('summary-total');
-    //
-    //     const payNowUI = document.getElementById('summary-pay-now');
-    //     const payLaterUI = document.getElementById('summary-pay-later');
-    //     const depositUI = document.getElementById('summary-deposit');
-    //     const daysTextUI = document.getElementById('summary-days-text');
-    //
-    //     const discountWrapper = document.getElementById('discount-wrapper');
-    //     const discountPercent = document.getElementById('discount-percent');
-    //     const originalTotalPrice = document.getElementById('original-total-price');
-    //
-    //     if (tariffMultiplier < 1.0) {
-    //         const discountVal = Math.round((1 - tariffMultiplier) * 100);
-    //         if (discountWrapper) {
-    //             discountWrapper.classList.remove('hidden');
-    //             discountWrapper.classList.add('flex');
-    //         }
-    //         if (discountPercent) discountPercent.innerText = `-${discountVal}% LONG-TERM`;
-    //
-    //         if (originalTotalPrice) originalTotalPrice.innerText = '€' + totalBaseRentBeforeTariff.toFixed(2);
-    //     } else {
-    //
-    //         if (discountWrapper) {
-    //             discountWrapper.classList.add('hidden');
-    //             discountWrapper.classList.remove('flex');
-    //         }
-    //     }
-    //
-    //     if (daysTextUI) daysTextUI.innerText = totalDays;
-    //     if (baseRentUI) baseRentUI.innerText = '€' + baseRentCost.toFixed(2);
-    //     if (insuranceUI) insuranceUI.innerText = totalInsuranceCost > 0 ? '€' + totalInsuranceCost.toFixed(2) : 'Included';
-    //     if (servicesUI) servicesUI.innerText = totalServicesCost > 0 ? '€' + totalServicesCost.toFixed(2) : '€0.00';
-    //     if (deliveryUI) deliveryUI.innerText = totalDeliveryFee > 0 ? '€' + totalDeliveryFee.toFixed(2) : 'Please choose one';
-    //
-    //
-    //     const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
-    //     const payNow = (baseRentCost + totalInsuranceCost + totalServicesCost) * 0.20;
-    //     const payLater = grandTotal - payNow;
-    //
-    //
-    //     if (totalUI) totalUI.innerText = '€' + grandTotal.toFixed(2);
-    //     if (payNowUI) payNowUI.innerText = '€' + payNow.toFixed(2);
-    //     if (payLaterUI) payLaterUI.innerText = '€' + payLater.toFixed(2);
-    //     if (depositUI) depositUI.innerText = '€' + depositAmount.toFixed(2);
-    // }
-
     function calculateTotal() {
         const daysElement = document.getElementById('calc-total-days');
         const dailyRateElement = document.getElementById('calc-daily-rate');
@@ -1287,14 +1048,21 @@
             totalServicesCost += (qty * price);
         });
 
-        const pickupSelect = document.querySelector('select[name="pickupLocation"]');
-        const dropoffSelect = document.querySelector('select[name="dropoffLocation"]');
 
-        if (pickupSelect && pickupSelect.options[pickupSelect.selectedIndex]) {
-            totalDeliveryFee += parseFloat(pickupSelect.options[pickupSelect.selectedIndex].getAttribute('data-price')) || 0;
+        const modalPickupSelect = document.getElementById('modal_pickup_location');
+        const modalDropoffSelect = document.getElementById('modal_dropoff_location');
+        const searchPickupSelect = document.querySelector('select[name="pickupLocation"]');
+        const searchDropoffSelect = document.querySelector('select[name="dropoffLocation"]');
+
+
+        const activePickupSelect = modalPickupSelect || searchPickupSelect;
+        const activeDropoffSelect = modalDropoffSelect || searchDropoffSelect;
+
+        if (activePickupSelect && activePickupSelect.options[activePickupSelect.selectedIndex]) {
+            totalDeliveryFee += parseFloat(activePickupSelect.options[activePickupSelect.selectedIndex].getAttribute('data-price')) || 0;
         }
-        if (dropoffSelect && dropoffSelect.options[dropoffSelect.selectedIndex]) {
-            totalDeliveryFee += parseFloat(dropoffSelect.options[dropoffSelect.selectedIndex].getAttribute('data-price')) || 0;
+        if (activeDropoffSelect && activeDropoffSelect.options[activeDropoffSelect.selectedIndex]) {
+            totalDeliveryFee += parseFloat(activeDropoffSelect.options[activeDropoffSelect.selectedIndex].getAttribute('data-price')) || 0;
         }
 
         const baseRentUI = document.getElementById('summary-base-rent');
@@ -1331,8 +1099,7 @@
         if (baseRentUI) baseRentUI.innerText = '€' + baseRentCost.toFixed(2);
         if (insuranceUI) insuranceUI.innerText = totalInsuranceCost > 0 ? '€' + totalInsuranceCost.toFixed(2) : '€0.00';
         if (servicesUI) servicesUI.innerText = totalServicesCost > 0 ? '€' + totalServicesCost.toFixed(2) : '€0.00';
-        if (deliveryUI) deliveryUI.innerText = totalDeliveryFee > 0 ? '€' + totalDeliveryFee.toFixed(2) : 'Please choose one';
-
+        if (deliveryUI) deliveryUI.innerText = totalDeliveryFee > 0 ? '€' + totalDeliveryFee.toFixed(2) : '€0.00';
 
         const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
 
@@ -1391,14 +1158,30 @@
             dDateDisplay.innerText = `${formatBeautifulDate(dDateVal)}, ${formatTimeAMPM(dTimeVal)}`;
         }
 
+        const searchPSelect = document.querySelector('select[name="pickupLocation"]');
+        const searchDSelect = document.querySelector('select[name="dropoffLocation"]');
 
-        const pSelect = document.querySelector('select[name="pickupLocation"]');
-        const dSelect = document.querySelector('select[name="dropoffLocation"]');
-        const pLocText = (pSelect && pSelect.selectedIndex !== -1) ? pSelect.options[pSelect.selectedIndex].text : 'Tirana Airport (TIA)';
-        const dLocText = (dSelect && dSelect.selectedIndex !== -1) ? dSelect.options[dSelect.selectedIndex].text : 'Tirana Airport (TIA)';
+        const modalPSelect = document.getElementById('modal_pickup_location');
+        const modalDSelect = document.getElementById('modal_dropoff_location');
 
-        document.getElementById('display-pickup-loc').innerText = pLocText;
-        document.getElementById('display-dropoff-loc').innerText = dLocText;
+        if (modalPSelect) {
+            if (searchPSelect && searchPSelect.value !== '') {
+                modalPSelect.value = searchPSelect.value;
+            } else {
+                let opt = Array.from(modalPSelect.options).find(o => o.text.toLowerCase().includes('tirana') && o.text.toLowerCase().includes('airport'));
+                if (opt) modalPSelect.value = opt.value;
+            }
+        }
+
+        if (modalDSelect) {
+            if (searchDSelect && searchDSelect.value !== '') {
+                modalDSelect.value = searchDSelect.value;
+            } else {
+                let opt = Array.from(modalDSelect.options).find(o => o.text.toLowerCase().includes('tirana') && o.text.toLowerCase().includes('airport'));
+                if (opt) modalDSelect.value = opt.value;
+            }
+        }
+
     }
 </script>
 

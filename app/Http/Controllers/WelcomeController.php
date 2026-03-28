@@ -108,6 +108,8 @@ class WelcomeController extends Controller
 
         $seasonalPrices = SeasonalPrice::where('company_id', $vehicle->company_id)->get();
 
+        $deliveries = Delivery::orderBy('city_id')->orderBy('price')->get();
+
         if ($request->ajax()) {
 
             return view('partials.booking_modal_content', with([
@@ -118,7 +120,8 @@ class WelcomeController extends Controller
                     'tariffs' => $tariffs,
                     'seasonalPrices' =>$seasonalPrices,
                     'bookedDates'=>$bookedDates,
-                    'hasConflict' =>$hasConflict,])
+                    'hasConflict' =>$hasConflict,
+                    'deliveries' => $deliveries,])
             )->render();
         }
         abort(404);

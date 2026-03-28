@@ -133,7 +133,6 @@ class CompaniesController extends Controller
             'password'                    => Hash::make($request->input('password')),
             'role_id'                     => 2,
             'user_type'                   => UserTypesEnum::COMPANY_ADMIN,
-            'booking_fee_percentage'      => $request->booking_fee_percentage ?? 0,
             'status'                      => true,
         ]);
 
@@ -146,6 +145,7 @@ class CompaniesController extends Controller
             'status'      => $request->status ? true : true,
             'city_id'     => $request->city_id ?? null,
             'logo'        => $logoPath,
+            'booking_fee_percentage'      => $request->booking_fee_percentage ?? 0,
         ]);
 
         $admin->update([

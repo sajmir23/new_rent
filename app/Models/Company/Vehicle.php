@@ -130,7 +130,7 @@ class Vehicle extends Model
             ->with([
                 'vehicleModel:id,brand_id,title',
                 'vehicleModel.brands:id,title',
-                'company:id,city_id',
+                'company:id,city_id,booking_fee_percentage',
                 'company.city:id,name',
                 'vehicleCategory:id,title_en,title_it,title_al,title_es,title_fr,title_de',
                 'fuelType:id,title_en,title_it,title_al,title_es,title_fr,title_de',
