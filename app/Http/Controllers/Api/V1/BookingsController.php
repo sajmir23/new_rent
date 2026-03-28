@@ -189,11 +189,9 @@ class BookingsController extends Controller
 
         $tempKey = 'booking_temp_' . $booking_code;
 
-        $depositPrice = $booking->insurance->deposit_price ?? 0;
-
         $pricingDetails = app(BookingPricingService::class)->calculate($request->all(), $vehicle);
         $commissionPercentage = $vehicle->company->booking_fee_percentage;
-        $commissionAmount = round(($pricingDetails['total_price'] - $depositPrice) * ($commissionPercentage / 100), 2);
+        $commissionAmount = round($pricingDetails['total_price'] * ($commissionPercentage / 100), 2);
 
         cache()->put($tempKey, [
             'booking_data' => array_merge($request->all(),[

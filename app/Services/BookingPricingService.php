@@ -81,8 +81,8 @@ class BookingPricingService
         $totalPrice = $pricing['total_price']
             + $addonsTotal
             + $insuranceTotal
-            + $depositTotal
             + $deliveriesTotal;
+        // + $depositTotal
 
         return [
             'base_price'        => $pricing['total_price'],

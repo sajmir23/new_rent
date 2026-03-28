@@ -1337,10 +1337,8 @@
         const grandTotal = baseRentCost + totalInsuranceCost + totalServicesCost + totalDeliveryFee;
 
         const feeInput = document.getElementById('calc-fee-percentage');
-        const feePercentage = feeInput ? (parseFloat(feeInput.value) / 100) : 0.20;
-
-        const baseForCommission = grandTotal - depositAmount;
-        const payNow = baseForCommission * feePercentage;
+        const feePercentage = (feeInput && feeInput.value) ? (parseFloat(feeInput.value) / 100) : 0.20;
+        const payNow = grandTotal * feePercentage;
         const payLater = grandTotal - payNow;
 
         if (totalUI) totalUI.innerText = '€' + grandTotal.toFixed(2);

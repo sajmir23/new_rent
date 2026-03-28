@@ -54,7 +54,7 @@
 
             <div class="flex justify-between gap-4 text-sm mt-1">
                 <span class="text-gray-500 font-semibold shrink-0">Balance to pay at pick-up:</span>
-                <span class="font-bold text-gray-800 text-right">€{{ number_format($booking->total_price - ($booking->commission_amount + $booking->insurance->deposit_price), 2) }}</span>
+                <span class="font-bold text-gray-800 text-right">€{{ number_format($booking->total_price - $booking->commission_amount, 2) }}</span>
             </div>
         </div>
     </div>

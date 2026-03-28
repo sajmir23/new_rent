@@ -321,6 +321,7 @@
     <input type="hidden" id="calc-daily-rate" value="{{ $vehicle->base_daily_rate }}">
     <input type="hidden" id="calc-tariffs" value="{{ json_encode($tariffs ?? []) }}">
     <input type="hidden" id="calc-seasonal-prices" value="{{ json_encode($seasonalPrices ?? []) }}">
+    <input type="hidden" id="calc-fee-percentage" value="{{ $vehicle->company->booking_fee_percentage ?? 20 }}">
 
     <h3 class="text-xl font-black text-gray-800 uppercase tracking-tight mb-6 sm:mb-8">Cost Summary</h3>
 
