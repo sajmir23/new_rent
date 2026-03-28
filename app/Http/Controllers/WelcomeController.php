@@ -18,13 +18,25 @@ use Illuminate\Support\Carbon;
 
 class WelcomeController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $categories = VehicleCategory::where('status', true)->get();
+
         $cities = City::orderBy('name', 'asc')->get();
+
         $deliveries = Delivery::orderBy('city_id')->orderBy('price')->get();
 
         $vehicles = Vehicle::baseData()->latest()->paginate(6);
+
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('partials.vehicle_list', compact('vehicles'))->render(),
+                'total' => $vehicles->total(),
+                'current_count' => $vehicles->count(),
+                'next_page' => $vehicles->nextPageUrl(),
+                'has_more' => $vehicles->hasMorePages()
+            ]);
+        }
 
         return view('welcomee', compact('categories', 'cities','vehicles','deliveries'));
     }
@@ -33,7 +45,7 @@ class WelcomeController extends Controller
     {
         $filters = $request->all();
 
-        $vehicles = Vehicle::baseData()->filter($filters)->paginate(6);
+        $vehicles = Vehicle::baseData()->filter($filters)->paginate(6)->appends($request->all());
 
         $categories = VehicleCategory::where('status', true)->get();
         $cities = City::orderBy('name', 'asc')->get();
